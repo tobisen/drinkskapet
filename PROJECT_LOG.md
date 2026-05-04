@@ -308,3 +308,18 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Consider adding quick filter reset and sort options.
+
+## 2026-05-04 (Drinks filters)
+
+### Changed
+- Updated `src/views/DrinksView.vue` with local filters for text search, status, and favorites-only.
+- Added status filter options for all / can make now / missing one / missing multiple.
+- Added filtered results count and clear empty state when no drinks match.
+- Kept filters local while continuing to use `useInventory`, `useDrinkFavorites`, and recommendation service.
+
+### Why
+- Makes drink discovery and decision-making faster when the list grows.
+- Keeps filtering simple and client-side without backend complexity.
+
+### Next
+- Consider adding quick filter reset and sort by name/status.

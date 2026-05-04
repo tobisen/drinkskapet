@@ -66,6 +66,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Drinks view (shared favorites state):
   - Uses `seedDrinks` and shared inventory data
   - Groups drinks by recommendation status
+  - Adds local filters (search, status, favorites-only)
+  - Shows filtered results count and clear empty state
   - Shows name, description, ingredients, and missing ingredients
   - Supports toggling shared drink favorite state
 - Favorites view (read-only):
