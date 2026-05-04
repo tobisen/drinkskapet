@@ -64,3 +64,21 @@ This file tracks meaningful project decisions and implementation steps.
 ### Next
 - Implement recommendation service logic (can make now / missing one / missing multiple).
 - Add a simple inventory seed list and connect seed data to views.
+
+## 2026-05-04 (Recommendation service)
+
+### Changed
+- Added recommendation result and purchase suggestion types in `src/features/recommendations/types.ts`.
+- Added `getDrinkRecommendations` in `src/features/recommendations/recommendationService.ts`.
+- Added `getSuggestedNextPurchases` in `src/features/recommendations/recommendationService.ts`.
+- Implemented deterministic matching between inventory items and ingredient `matchingTerms`.
+- Implemented drink classification into `canMakeNow`, `missingOneIngredient`, and `missingMultipleIngredients`.
+
+### Why
+- Introduces the first framework-independent domain logic for core product value.
+- Makes missing ingredients explicit per drink for future UI rendering.
+- Enables data-driven next-purchase suggestions based on unlocked drinks.
+
+### Next
+- Add tests for recommendation matching and purchase suggestion ranking.
+- Connect recommendation service to the Drink Suggestions view.
