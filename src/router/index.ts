@@ -7,6 +7,7 @@ import DrinkDetailView from '../views/DrinkDetailView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
 import DiscoverView from '../views/DiscoverView.vue'
 import ShoppingSuggestionsView from '../views/ShoppingSuggestionsView.vue'
+import ImportView from '../views/ImportView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +51,11 @@ const router = createRouter({
       path: '/shopping-suggestions',
       name: 'shopping-suggestions',
       component: ShoppingSuggestionsView,
+    },
+    {
+      path: '/import',
+      name: 'import',
+      component: ImportView,
     },
   ],
 })

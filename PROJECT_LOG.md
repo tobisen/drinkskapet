@@ -466,3 +466,18 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Optionally prefill category for suggestion items where mapping is confident.
+
+## 2026-05-04 (Minimal Import view)
+
+### Changed
+- Added `src/views/ImportView.vue` with a mobile-first URL input and disabled placeholder submit flow.
+- Added route `/import` in `src/router/index.ts`.
+- Added Import navigation link in `src/App.vue`.
+- Added planned import scope text for drink recipe URLs, product URLs, and food recipe URLs later.
+
+### Why
+- Creates a clear entry point for future URL-based import features without implementing scraping or external API calls.
+- Keeps current behavior explicit so users understand the feature is planned.
+
+### Next
+- Define the import parsing contract and validation rules before implementing actual fetch/parse flows.

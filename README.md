@@ -31,6 +31,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Favorites
   - Discover
   - Shopping Suggestions
+  - Import
 - Initial domain model for:
   - Inventory categories and items
   - Drink recipes and drink ingredients
@@ -117,6 +118,10 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Lets users add next-purchase suggestions directly to the shopping list
   - Shows clear feedback for added/already-existing suggestion items
   - Shows "already on shopping list" state when applicable
+- Import view:
+  - Adds `/import` with a minimal URL input
+  - Uses disabled placeholder submit flow
+  - Explains planned import types (drink recipe URL, product URL, food recipe URL later)
 
 ## Planned MVP features
 
@@ -197,6 +202,7 @@ src/
     FavoritesView.vue
     DiscoverView.vue
     ShoppingSuggestionsView.vue
+    ImportView.vue
   App.vue
   main.ts
   style.css
@@ -212,6 +218,7 @@ src/
 - `/favorites` -> Favorites
 - `/discover` -> Discover
 - `/shopping-suggestions` -> Shopping Suggestions
+- `/import` -> Import
 
 ## Environment variables
 

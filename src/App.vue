@@ -15,6 +15,7 @@ const text = {
     favorites: 'Favoriter',
     discover: 'Upptäck',
     shoppingSuggestions: 'Shoppingförslag',
+    import: 'Import',
   },
   en: {
     title: 'Drinkskåpet',
@@ -27,6 +28,7 @@ const text = {
     favorites: 'Favorites',
     discover: 'Discover',
     shoppingSuggestions: 'Shopping Suggestions',
+    import: 'Import',
   },
 } as const
 
@@ -91,6 +93,7 @@ export default defineComponent({
           <RouterLink to="/favorites" exact-active-class="is-active">{{ t.favorites }}</RouterLink>
           <RouterLink to="/discover" exact-active-class="is-active">{{ t.discover }}</RouterLink>
           <RouterLink to="/shopping-suggestions" exact-active-class="is-active">{{ t.shoppingSuggestions }}</RouterLink>
+          <RouterLink to="/import" exact-active-class="is-active">{{ t.import }}</RouterLink>
         </nav>
       </div>
     </header>
