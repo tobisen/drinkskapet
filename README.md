@@ -86,6 +86,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Route: `/drinks/:id`
   - Loads drink from seed data by route id
   - Shows make-now status and missing ingredients via recommendation service
+  - Supports adding missing ingredients directly to inventory with duplicate checks
   - Shows name, description, ingredients, method, glass, tags, and favorite toggle
   - Includes back link to Drinks and clear not-found state
 - Favorites view (read-only):

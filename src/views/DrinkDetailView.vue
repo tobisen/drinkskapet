@@ -5,6 +5,7 @@ import { useInventory } from '../features/inventory/useInventory'
 import { useDrinkFavorites } from '../features/drinks/useDrinkFavorites'
 import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
 import type { DrinkRecipe } from '../features/drinks/types'
+import type { InventoryCategory } from '../features/inventory/types'
 
 const text = {
   sv: {
@@ -22,6 +23,9 @@ const text = {
     missingMultiple: 'Saknar flera ingredienser',
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
+    addToInventory: 'Lägg till i inventering',
+    addedToInventory: 'Tillagd i inventering.',
+    alreadyInInventory: 'Finns redan i inventeringen.',
   },
   en: {
     backToDrinks: 'Back to Drinks',
@@ -38,10 +42,47 @@ const text = {
     missingMultiple: 'Missing Multiple Ingredients',
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
+    addToInventory: 'Add to inventory',
+    addedToInventory: 'Added to inventory.',
+    alreadyInInventory: 'Already exists in inventory.',
   },
 } as const
 
 type LanguageCode = keyof typeof text
+
+function normalize(value: string): string {
+  return value.trim().toLowerCase()
+}
+
+function getDefaultCategoryForIngredient(name: string): InventoryCategory {
+  const normalized = normalize(name)
+
+  if (normalized.includes('rum') || normalized.includes('gin') || normalized.includes('vodka') || normalized.includes('whiskey') || normalized.includes('whisky') || normalized.includes('bourbon') || normalized.includes('tequila')) {
+    return 'spirits'
+  }
+
+  if (normalized.includes('vermouth')) {
+    return 'vermouth'
+  }
+
+  if (normalized.includes('bitters')) {
+    return 'bitters'
+  }
+
+  if (normalized.includes('juice')) {
+    return 'juices'
+  }
+
+  if (normalized.includes('syrup') || normalized.includes('sockerlag')) {
+    return 'syrups'
+  }
+
+  if (normalized.includes('mint') || normalized.includes('olive') || normalized.includes('twist') || normalized.includes('peel') || normalized.includes('wedge')) {
+    return 'garnishes'
+  }
+
+  return 'mixers'
+}
 
 export default defineComponent({
   name: 'DrinkDetailView',
@@ -50,6 +91,7 @@ export default defineComponent({
     return {
       inventoryStore: useInventory(),
       drinkFavoritesStore: useDrinkFavorites(),
+      ingredientFeedback: {} as Record<string, 'added' | 'exists'>,
     }
   },
   computed: {
@@ -117,6 +159,44 @@ export default defineComponent({
     isFavorite(drinkId: string): boolean {
       return this.drinkFavoritesStore.isDrinkFavorite(drinkId)
     },
+    addMissingIngredientToInventory(ingredientName: string) {
+      const normalizedIngredient = normalize(ingredientName)
+
+      const exists = this.inventoryStore.inventoryItems.some(
+        (item) => normalize(item.name) === normalizedIngredient,
+      )
+
+      if (exists) {
+        this.ingredientFeedback = {
+          ...this.ingredientFeedback,
+          [ingredientName]: 'exists',
+        }
+        return
+      }
+
+      this.inventoryStore.addInventoryItem({
+        name: ingredientName,
+        category: getDefaultCategoryForIngredient(ingredientName),
+      })
+
+      this.ingredientFeedback = {
+        ...this.ingredientFeedback,
+        [ingredientName]: 'added',
+      }
+    },
+    getIngredientFeedback(ingredientName: string): string {
+      const status = this.ingredientFeedback[ingredientName]
+
+      if (status === 'added') {
+        return this.t.addedToInventory
+      }
+
+      if (status === 'exists') {
+        return this.t.alreadyInInventory
+      }
+
+      return ''
+    },
   },
 })
 </script>
@@ -150,10 +230,20 @@ export default defineComponent({
         </ul>
       </div>
 
-      <p v-if="drinkRecommendationEntry && drinkRecommendationEntry.missingIngredients.length > 0">
-        <strong>{{ t.missingIngredients }}:</strong>
-        {{ drinkRecommendationEntry.missingIngredients.map((item) => item.name).join(', ') }}
-      </p>
+      <div v-if="drinkRecommendationEntry && drinkRecommendationEntry.missingIngredients.length > 0">
+        <h3>{{ t.missingIngredients }}</h3>
+        <ul>
+          <li v-for="missing in drinkRecommendationEntry.missingIngredients" :key="missing.name" class="missing-row">
+            <span>{{ missing.name }}</span>
+            <button type="button" @click="addMissingIngredientToInventory(missing.name)">
+              {{ t.addToInventory }}
+            </button>
+            <span v-if="getIngredientFeedback(missing.name)" class="feedback-message">
+              {{ getIngredientFeedback(missing.name) }}
+            </span>
+          </li>
+        </ul>
+      </div>
 
       <div>
         <h3>{{ t.method }}</h3>
@@ -214,11 +304,22 @@ export default defineComponent({
   padding-left: 1.1rem;
 }
 
-.title-row button {
+.title-row button,
+.missing-row button {
   font: inherit;
   border: 1px solid #cdd8d2;
   background: #fff;
   border-radius: 0.35rem;
   padding: 0.35rem 0.55rem;
+}
+
+.missing-row {
+  margin-bottom: 0.5rem;
+}
+
+.feedback-message {
+  margin-left: 0.5rem;
+  font-size: 0.88rem;
+  color: #5a6a60;
 }
 </style>

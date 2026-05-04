@@ -419,3 +419,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Optionally show missing ingredient names in the close-match group.
+
+## 2026-05-04 (Add missing ingredients from drink detail)
+
+### Changed
+- Updated `src/views/DrinkDetailView.vue` to show an "Add to inventory" button for each missing ingredient.
+- Added inventory insert flow using `useInventory.addInventoryItem`.
+- Added duplicate prevention against existing inventory item names (case-insensitive).
+- Added simple per-ingredient feedback messages for added/existing states.
+- Added default category mapping for missing ingredients when adding to inventory.
+
+### Why
+- Makes it faster to act on missing ingredients directly from drink detail context.
+- Keeps flow client-side and consistent with existing shared inventory logic.
+
+### Next
+- Optionally map more ingredient names to categories/subcategories for higher precision.
