@@ -530,3 +530,23 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Replace placeholder manifest icons with dedicated 192x192 and 512x512 PNG icons for broader install compatibility.
+
+## 2026-05-04 (First Wine section)
+
+### Changed
+- Added `src/views/WineView.vue` as a mobile-first wine overview page.
+- Added route `/wine` in `src/router/index.ts`.
+- Added Wine navigation link in `src/App.vue`.
+- Filtered wine data from shared inventory (`useInventory`) for categories `wine` and `sparkling-wine`.
+- Grouped wines by subcategory: red, white, rosé, sparkling, dessert, fortified, and other.
+- Added separate favorite wines section and clear empty states.
+- Linked each wine item to existing inventory detail pages.
+- Added read-only placeholder section for future food pairing ideas.
+- Expanded `src/data/demoInventory.ts` with realistic Swedish home wine examples.
+
+### Why
+- Introduces a focused wine overview without adding backend/auth complexity.
+- Reuses existing inventory data model and navigation structure.
+
+### Next
+- Add optional wine-specific filters (style, favorites-only, search) in the Wine view.
