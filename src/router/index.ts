@@ -1,0 +1,39 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import DashboardView from '../views/DashboardView.vue'
+import InventoryView from '../views/InventoryView.vue'
+import DrinksView from '../views/DrinksView.vue'
+import FavoritesView from '../views/FavoritesView.vue'
+import DiscoverView from '../views/DiscoverView.vue'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '/',
+      name: 'dashboard',
+      component: DashboardView,
+    },
+    {
+      path: '/inventory',
+      name: 'inventory',
+      component: InventoryView,
+    },
+    {
+      path: '/drinks',
+      name: 'drinks',
+      component: DrinksView,
+    },
+    {
+      path: '/favorites',
+      name: 'favorites',
+      component: FavoritesView,
+    },
+    {
+      path: '/discover',
+      name: 'discover',
+      component: DiscoverView,
+    },
+  ],
+})
+
+export default router

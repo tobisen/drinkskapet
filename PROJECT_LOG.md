@@ -16,19 +16,34 @@ This file tracks meaningful project decisions and implementation steps.
 - The app should be personal and inventory-based, not just a generic recipe website.
 - AI coding assistants should follow the same technical and product principles throughout the project.
 
-### Current scope
-- Vue 3 + Vite + TypeScript
-- GitHub
-- Vercel
-- Mobile-first web app
-- PWA support later
-- Authentication and persistence later
-- Barcode and article number lookup later
-- Food recipes and drink pairing later
-
 ### Next
 - Create the initial Vue project.
 - Add Vue Router.
 - Add base app views.
 - Add inventory and drink domain types.
 - Add seed data for inventory categories and initial drink recipes.
+
+## 2026-05-04 (Initial app structure)
+
+### Changed
+- Added `vue-router`.
+- Added router setup in `src/router/index.ts`.
+- Created base views:
+  - `DashboardView.vue`
+  - `InventoryView.vue`
+  - `DrinksView.vue`
+  - `FavoritesView.vue`
+  - `DiscoverView.vue`
+- Added routes for all base views.
+- Replaced Vite starter app with a minimal mobile-first app shell in `App.vue`.
+- Updated global styles for a simple responsive layout.
+
+### Why
+- Establishes a clear and navigable foundation for feature work.
+- Keeps early implementation minimal while matching the product's primary screens.
+- Separates navigation and views from future domain logic.
+
+### Next
+- Add initial domain types for inventory and drinks.
+- Add seed data.
+- Start building rule-based recommendation logic in a separate service.

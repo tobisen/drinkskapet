@@ -13,11 +13,21 @@ The app should answer:
 - What should I buy next?
 - What should I try?
 
-## Core product idea
+## Current status
 
-This is not a generic drink recipe website.
+Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router and base mobile-first views.
 
-The core idea is a personal home bar app that gives useful recommendations based on what the user already owns.
+## Implemented features
+
+- Vue 3 + Vite + TypeScript setup
+- Vue Router with base routes
+- Base app shell with responsive header/navigation
+- Initial views:
+  - Dashboard
+  - My Bar / Inventory
+  - Drink Suggestions
+  - Favorites
+  - Discover
 
 ## Planned MVP features
 
@@ -32,18 +42,6 @@ The core idea is a personal home bar app that gives useful recommendations based
 - Mobile-first interface
 - Deploy to Vercel
 
-## Future features
-
-- User login
-- Persistent user inventory
-- Barcode lookup
-- Article number lookup
-- PWA installation on home screen
-- Food recipes
-- Drink pairing with food
-- LCHF-friendly food and drink filtering
-- Discovery recommendations for drinks and products the user has not tried before
-
 ## Tech stack
 
 - Vue 3
@@ -53,63 +51,40 @@ The core idea is a personal home bar app that gives useful recommendations based
 - GitHub
 - Vercel
 
-## Recommended development order
-
-1. Create Vue + Vite + TypeScript app
-2. Add Vue Router
-3. Add base views
-4. Add inventory and drink domain types
-5. Add seed data
-6. Add inventory list
-7. Add drink list
-8. Add recommendation matching
-9. Add favorites
-10. Add shopping suggestions
-11. Add persistence
-12. Add authentication
-13. Add barcode and article lookup
-14. Add PWA support
-15. Add food recipe support
-
 ## Getting started
 
 Install dependencies:
 
+```bash
 npm install
+```
 
 Start development server:
 
+```bash
 npm run dev
+```
 
 Build for production:
 
+```bash
 npm run build
+```
 
 Preview production build:
 
+```bash
 npm run preview
+```
 
 ## Project structure
 
-Planned structure:
+Current structure:
 
+```text
 src/
   assets/
   components/
-  data/
-  features/
-    auth/
-    inventory/
-      components/
-      types.ts
-    drinks/
-      components/
-      types.ts
-    favorites/
-      components/
-      types.ts
-    recommendations/
-      recommendationService.ts
   router/
     index.ts
   views/
@@ -120,49 +95,22 @@ src/
     DiscoverView.vue
   App.vue
   main.ts
+  style.css
+```
 
-## Main views
+## Routes
 
-### Dashboard
-
-Overview of inventory, available drinks, missing ingredients and suggested next purchases.
-
-### My Bar / Inventory
-
-The user's home inventory, including beer, wine, sparkling wine, cider, spirits, liqueurs, bitters, vermouth, mixers, juices, syrups, garnishes and other items.
-
-### Drink Suggestions
-
-Drink recommendations based on available inventory.
-
-### Favorites
-
-Favorite drinks and inventory items.
-
-### Discover
-
-Suggestions for drinks, ingredients and products the user has not tried before.
-
-### Shopping Suggestions
-
-Recommended next purchases based on what unlocks the most drink recipes.
-
-## Recommendation model
-
-Drink suggestions should initially be rule-based and deterministic.
-
-Drinks can be classified as:
-- Can be made now
-- Missing one ingredient
-- Missing multiple ingredients
-
-The app should also be able to suggest ingredients or products that unlock the most drink recipes.
+- `/` -> Dashboard
+- `/inventory` -> My Bar / Inventory
+- `/drinks` -> Drink Suggestions
+- `/favorites` -> Favorites
+- `/discover` -> Discover
 
 ## Environment variables
 
 No environment variables are required yet.
 
-When environment variables are introduced, document them in .env.example.
+When environment variables are introduced, document them in `.env.example`.
 
 ## Deployment
 
@@ -170,28 +118,12 @@ The app is intended to be deployed with Vercel.
 
 Expected Vercel settings:
 
-Framework preset: Vite
-Build command: npm run build
-Output directory: dist
+- Framework preset: Vite
+- Build command: `npm run build`
+- Output directory: `dist`
 
-## GitHub authentication
+## Notes
 
-Use SSH or GitHub CLI for GitHub authentication.
-
-Do not use password authentication for Git operations.
-
-## Documentation rules
-
-Before each commit, update this README when the change affects:
-- project purpose
-- setup instructions
-- available scripts
-- folder structure
-- main features
-- deployment
-- environment variables
-- architecture decisions
-- known limitations
-- next steps
-
-Also update PROJECT_LOG.md after meaningful changes.
+- No authentication is implemented yet.
+- No backend, database, external services or PWA setup is included yet.
+- Recommendation logic and domain models are not implemented yet.
