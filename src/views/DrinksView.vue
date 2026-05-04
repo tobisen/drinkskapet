@@ -16,10 +16,7 @@ const demoInventory: InventoryItem[] = [
 const text = {
   sv: {
     title: 'Drinkförslag',
-    intro: 'Översikt baserad på demo-inventory och seed drinks.',
-    language: 'Språk',
-    languageSwedish: 'Svenska',
-    languageEnglish: 'Engelska',
+    intro: 'Översikt baserad på demo-inventering och seedade drinkar.',
     canMakeNow: 'Kan göra nu',
     missingOne: 'Saknar en ingrediens',
     missingMultiple: 'Saknar flera ingredienser',
@@ -32,9 +29,6 @@ const text = {
   en: {
     title: 'Drink Suggestions',
     intro: 'Summary based on demo inventory and seed drinks.',
-    language: 'Language',
-    languageSwedish: 'Swedish',
-    languageEnglish: 'English',
     canMakeNow: 'Can Make Now',
     missingOne: 'Missing One Ingredient',
     missingMultiple: 'Missing Multiple Ingredients',
@@ -50,15 +44,18 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'DrinksView',
+  inject: ['appLanguage'],
   data() {
     return {
-      selectedLanguage: 'sv' as LanguageCode,
       drinks: seedDrinks.map((drink) => ({ ...drink })),
     }
   },
   computed: {
     t() {
-      return text[this.selectedLanguage]
+      const selected =
+        ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
+          'sv') as LanguageCode
+      return text[selected]
     },
     recommendations() {
       return getDrinkRecommendations(demoInventory, this.drinks)
@@ -83,16 +80,7 @@ export default defineComponent({
 
 <template>
   <section class="view drinks-view">
-    <div class="header-row">
-      <h2>{{ t.title }}</h2>
-      <label>
-        {{ t.language }}
-        <select v-model="selectedLanguage">
-          <option value="sv">{{ t.languageSwedish }}</option>
-          <option value="en">{{ t.languageEnglish }}</option>
-        </select>
-      </label>
-    </div>
+    <h2>{{ t.title }}</h2>
 
     <p class="intro">{{ t.intro }}</p>
 
@@ -149,26 +137,6 @@ export default defineComponent({
 .drinks-view {
   display: grid;
   gap: 1rem;
-}
-
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: end;
-  gap: 0.75rem;
-}
-
-.header-row label {
-  display: grid;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.header-row select {
-  font: inherit;
-  padding: 0.35rem;
-  border: 1px solid #cdd8d2;
-  border-radius: 0.35rem;
 }
 
 .intro {

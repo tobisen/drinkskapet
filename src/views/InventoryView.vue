@@ -9,8 +9,34 @@ interface InventoryFormState {
   brand: string
 }
 
+const text = {
+  sv: {
+    title: 'Min bar / Inventering',
+    intro: 'Håll koll på vad du har hemma.',
+    name: 'Namn',
+    category: 'Kategori',
+    brand: 'Varumärke (valfritt)',
+    addItem: 'Lägg till',
+    favorite: 'Favorit',
+    unfavorite: 'Ta bort favorit',
+  },
+  en: {
+    title: 'My Bar / Inventory',
+    intro: 'Track what you have at home.',
+    name: 'Name',
+    category: 'Category',
+    brand: 'Brand (optional)',
+    addItem: 'Add Item',
+    favorite: 'Favorite',
+    unfavorite: 'Unfavorite',
+  },
+} as const
+
+type LanguageCode = keyof typeof text
+
 export default defineComponent({
   name: 'InventoryView',
+  inject: ['appLanguage'],
   data() {
     return {
       categories: inventoryCategories,
@@ -45,6 +71,14 @@ export default defineComponent({
         brand: '',
       } as InventoryFormState,
     }
+  },
+  computed: {
+    t() {
+      const selected =
+        ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
+          'sv') as LanguageCode
+      return text[selected]
+    },
   },
   methods: {
     addItem() {
@@ -92,24 +126,24 @@ export default defineComponent({
 
 <template>
   <section class="view inventory-view">
-    <h2>My Bar / Inventory</h2>
-    <p class="intro">Track what you have at home.</p>
+    <h2>{{ t.title }}</h2>
+    <p class="intro">{{ t.intro }}</p>
 
     <form class="inventory-form" @submit.prevent="addItem">
-      <label for="item-name">Name</label>
+      <label for="item-name">{{ t.name }}</label>
       <input id="item-name" v-model="form.name" type="text" required />
 
-      <label for="item-category">Category</label>
+      <label for="item-category">{{ t.category }}</label>
       <select id="item-category" v-model="form.category">
         <option v-for="category in categories" :key="category.id" :value="category.id">
           {{ category.label }}
         </option>
       </select>
 
-      <label for="item-brand">Brand (optional)</label>
+      <label for="item-brand">{{ t.brand }}</label>
       <input id="item-brand" v-model="form.brand" type="text" />
 
-      <button type="submit">Add Item</button>
+      <button type="submit">{{ t.addItem }}</button>
     </form>
 
     <ul class="inventory-list">
@@ -122,7 +156,7 @@ export default defineComponent({
           </p>
         </div>
         <button type="button" class="favorite-button" @click="toggleFavorite(item.id)">
-          {{ item.isFavorite ? 'Unfavorite' : 'Favorite' }}
+          {{ item.isFavorite ? t.unfavorite : t.favorite }}
         </button>
       </li>
     </ul>

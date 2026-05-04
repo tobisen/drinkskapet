@@ -8,53 +8,45 @@ import {
 import type { InventoryItem } from '../features/inventory/types'
 
 const demoInventory: InventoryItem[] = [
-  {
-    id: 'inv-gin',
-    name: 'Gin',
-    category: 'spirits',
-    quantity: 1,
-    isFavorite: false,
-  },
-  {
-    id: 'inv-vodka',
-    name: 'Vodka',
-    category: 'spirits',
-    quantity: 1,
-    isFavorite: false,
-  },
-  {
-    id: 'inv-white-rum',
-    name: 'White Rum',
-    category: 'spirits',
-    quantity: 1,
-    isFavorite: false,
-  },
-  {
-    id: 'inv-lime-juice',
-    name: 'Lime Juice',
-    category: 'juices',
-    quantity: 1,
-    isFavorite: false,
-  },
-  {
-    id: 'inv-simple-syrup',
-    name: 'Simple Syrup',
-    category: 'syrups',
-    quantity: 1,
-    isFavorite: false,
-  },
-  {
-    id: 'inv-tonic-water',
-    name: 'Tonic Water',
-    category: 'mixers',
-    quantity: 1,
-    isFavorite: false,
-  },
+  { id: 'inv-gin', name: 'Gin', category: 'spirits', quantity: 1, isFavorite: false },
+  { id: 'inv-vodka', name: 'Vodka', category: 'spirits', quantity: 1, isFavorite: false },
+  { id: 'inv-white-rum', name: 'White Rum', category: 'spirits', quantity: 1, isFavorite: false },
+  { id: 'inv-lime-juice', name: 'Lime Juice', category: 'juices', quantity: 1, isFavorite: false },
+  { id: 'inv-simple-syrup', name: 'Simple Syrup', category: 'syrups', quantity: 1, isFavorite: false },
+  { id: 'inv-tonic-water', name: 'Tonic Water', category: 'mixers', quantity: 1, isFavorite: false },
 ]
+
+const text = {
+  sv: {
+    title: 'Översikt',
+    intro: 'Snabb sammanfattning baserad på demo-innehåll och seedade drinkar.',
+    canMakeNow: 'Kan göra nu',
+    missingOne: 'Saknar en ingrediens',
+    nextPurchases: 'Topp nästa köp',
+    unlocks: 'låser upp',
+  },
+  en: {
+    title: 'Dashboard',
+    intro: 'Quick summary based on demo inventory and seed drinks.',
+    canMakeNow: 'Can Make Now',
+    missingOne: 'Missing One Ingredient',
+    nextPurchases: 'Top Next Purchases',
+    unlocks: 'unlocks',
+  },
+} as const
+
+type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'DashboardView',
+  inject: ['appLanguage'],
   computed: {
+    t() {
+      const selected =
+        ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
+          'sv') as LanguageCode
+      return text[selected]
+    },
     recommendations() {
       return getDrinkRecommendations(demoInventory, seedDrinks)
     },
@@ -67,12 +59,12 @@ export default defineComponent({
 
 <template>
   <section class="view">
-    <h2>Dashboard</h2>
-    <p class="intro">Quick summary based on demo inventory and seed drinks.</p>
+    <h2>{{ t.title }}</h2>
+    <p class="intro">{{ t.intro }}</p>
 
     <div class="summary-grid">
       <article class="summary-card">
-        <h3>Can Make Now ({{ recommendations.canMakeNow.length }})</h3>
+        <h3>{{ t.canMakeNow }} ({{ recommendations.canMakeNow.length }})</h3>
         <ul>
           <li v-for="entry in recommendations.canMakeNow.slice(0, 4)" :key="entry.drink.id">
             {{ entry.drink.name }}
@@ -81,7 +73,7 @@ export default defineComponent({
       </article>
 
       <article class="summary-card">
-        <h3>Missing One ({{ recommendations.missingOneIngredient.length }})</h3>
+        <h3>{{ t.missingOne }} ({{ recommendations.missingOneIngredient.length }})</h3>
         <ul>
           <li v-for="entry in recommendations.missingOneIngredient.slice(0, 4)" :key="entry.drink.id">
             {{ entry.drink.name }}: {{ entry.missingIngredients[0].name }}
@@ -90,10 +82,10 @@ export default defineComponent({
       </article>
 
       <article class="summary-card">
-        <h3>Top Next Purchases</h3>
+        <h3>{{ t.nextPurchases }}</h3>
         <ul>
           <li v-for="purchase in topPurchases" :key="purchase.ingredientName">
-            {{ purchase.ingredientName }} (unlocks {{ purchase.unlocksDrinkCount }})
+            {{ purchase.ingredientName }} ({{ t.unlocks }} {{ purchase.unlocksDrinkCount }})
           </li>
         </ul>
       </article>
