@@ -48,7 +48,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Includes a minimal add-item form (`name`, `category`, optional `brand`)
   - Supports toggling `isFavorite` per item
 - Drinks view (local state):
-  - Uses `seedDrinks` and a hardcoded demo inventory
+  - Uses `seedDrinks` and shared demo inventory data
   - Groups drinks by recommendation status
   - Shows name, description, ingredients, and missing ingredients
   - Supports toggling local `isFavorite` per drink
@@ -111,6 +111,7 @@ src/
   assets/
   components/
   data/
+    demoInventory.ts
     inventoryCategories.ts
     seedDrinks.ts
   features/
@@ -163,6 +164,7 @@ Expected Vercel settings:
 - No authentication is implemented yet.
 - No backend, database, external services or PWA setup is included yet.
 - Recommendation logic is deterministic and framework-independent.
-- Dashboard summary currently uses hardcoded demo inventory.
+- Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts`.
+- Dashboard summary currently uses demo inventory data only.
 - Inventory data is currently local view state only (no persistence).
 - Drinks view data is currently local view state only (no persistence).

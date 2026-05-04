@@ -1,18 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { demoInventory } from '../data/demoInventory'
 import { seedDrinks } from '../data/seedDrinks'
 import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
-import type { InventoryItem } from '../features/inventory/types'
-
-const demoInventory: InventoryItem[] = [
-  { id: 'inv-gin', name: 'Gin', category: 'spirits', quantity: 1, isFavorite: false },
-  { id: 'inv-vodka', name: 'Vodka', category: 'spirits', quantity: 1, isFavorite: false },
-  { id: 'inv-white-rum', name: 'White Rum', category: 'spirits', quantity: 1, isFavorite: false },
-  { id: 'inv-lime-juice', name: 'Lime Juice', category: 'juices', quantity: 1, isFavorite: false },
-  { id: 'inv-simple-syrup', name: 'Simple Syrup', category: 'syrups', quantity: 1, isFavorite: false },
-  { id: 'inv-tonic-water', name: 'Tonic Water', category: 'mixers', quantity: 1, isFavorite: false },
-]
-
 const text = {
   sv: {
     title: 'Drinkförslag',

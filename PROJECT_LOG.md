@@ -136,3 +136,17 @@ This file tracks meaningful project decisions and implementation steps.
 ### Next
 - Connect drinks recommendations to shared inventory state.
 - Add simple filtering by tags and favorites.
+
+## 2026-05-04 (Shared demo inventory data)
+
+### Changed
+- Added `src/data/demoInventory.ts` with typed shared `InventoryItem[]` demo data.
+- Updated `src/views/DashboardView.vue` to import shared demo inventory.
+- Updated `src/views/DrinksView.vue` to import shared demo inventory.
+
+### Why
+- Removes duplicated hardcoded inventory data across views.
+- Keeps demo recommendation input consistent between Dashboard and Drinks.
+
+### Next
+- Reuse the same inventory source in additional views where relevant.
