@@ -435,3 +435,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Optionally map more ingredient names to categories/subcategories for higher precision.
+
+## 2026-05-04 (Shopping list local state)
+
+### Changed
+- Added `src/features/shopping/useShoppingList.ts` with localStorage persistence.
+- Added duplicate prevention for shopping items by case-insensitive name.
+- Added shopping list actions: add, toggle checked, remove, and clear checked items.
+- Updated `src/views/DrinkDetailView.vue` to add missing ingredients to shopping list while keeping add-to-inventory.
+- Updated `src/views/ShoppingSuggestionsView.vue` to render and manage the current shopping list below recommendations.
+
+### Why
+- Makes missing ingredients actionable without backend or auth.
+- Reuses existing seed/inventory flows to support a simple planning loop for next purchases.
+
+### Next
+- Add optional quantity or notes per shopping list item.

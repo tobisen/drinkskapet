@@ -6,6 +6,7 @@ import {
   getDrinkRecommendations,
   getSuggestedNextPurchases,
 } from '../features/recommendations/recommendationService'
+import { useShoppingList } from '../features/shopping/useShoppingList'
 
 const text = {
   sv: {
@@ -14,6 +15,12 @@ const text = {
     unlocks: 'Låser upp/förbättrar drinkar',
     relatedDrinks: 'Relaterade drinkar',
     noSuggestions: 'Inga shoppingförslag tillgängliga just nu.',
+    shoppingListTitle: 'Inköpslista',
+    shoppingListEmpty: 'Inköpslistan är tom.',
+    addedFromDrink: 'Tillagd från',
+    remove: 'Ta bort',
+    clearChecked: 'Rensa markerade',
+    category: 'Kategori',
   },
   en: {
     title: 'Shopping Suggestions',
@@ -21,6 +28,12 @@ const text = {
     unlocks: 'Unlocks/Improves drinks',
     relatedDrinks: 'Related drinks',
     noSuggestions: 'No shopping suggestions available right now.',
+    shoppingListTitle: 'Shopping list',
+    shoppingListEmpty: 'Shopping list is empty.',
+    addedFromDrink: 'Added from',
+    remove: 'Remove',
+    clearChecked: 'Clear checked',
+    category: 'Category',
   },
 } as const
 
@@ -31,6 +44,7 @@ export default defineComponent({
   data() {
     return {
       inventoryStore: useInventory(),
+      shoppingListStore: useShoppingList(),
     }
   },
   inject: ['appLanguage'],
@@ -50,12 +64,24 @@ export default defineComponent({
     suggestions() {
       return getSuggestedNextPurchases(this.recommendations)
     },
+    shoppingListItems() {
+      return this.shoppingListStore.shoppingListItems
+    },
   },
   methods: {
     getRelatedDrinkNames(drinkIds: string[]): string[] {
       return drinkIds
         .map((id) => seedDrinks.find((drink) => drink.id === id)?.name)
         .filter((name): name is string => Boolean(name))
+    },
+    toggleShoppingListItem(itemId: string) {
+      this.shoppingListStore.toggleShoppingListItem(itemId)
+    },
+    removeShoppingListItem(itemId: string) {
+      this.shoppingListStore.removeShoppingListItem(itemId)
+    },
+    clearCheckedShoppingListItems() {
+      this.shoppingListStore.clearCheckedShoppingListItems()
     },
   },
 })
@@ -78,6 +104,33 @@ export default defineComponent({
     </ul>
 
     <p v-else>{{ t.noSuggestions }}</p>
+
+    <section class="shopping-list-section">
+      <div class="shopping-list-header">
+        <h3>{{ t.shoppingListTitle }}</h3>
+        <button type="button" @click="clearCheckedShoppingListItems">
+          {{ t.clearChecked }}
+        </button>
+      </div>
+
+      <ul v-if="shoppingListItems.length > 0" class="list">
+        <li v-for="item in shoppingListItems" :key="item.id" class="card">
+          <label class="shopping-item-row">
+            <input
+              :checked="item.isChecked"
+              type="checkbox"
+              @change="toggleShoppingListItem(item.id)"
+            />
+            <span :class="{ checked: item.isChecked }">{{ item.name }}</span>
+          </label>
+          <p v-if="item.category">{{ t.category }}: {{ item.category }}</p>
+          <p v-if="item.sourceDrinkName">{{ t.addedFromDrink }}: {{ item.sourceDrinkName }}</p>
+          <button type="button" @click="removeShoppingListItem(item.id)">{{ t.remove }}</button>
+        </li>
+      </ul>
+
+      <p v-else>{{ t.shoppingListEmpty }}</p>
+    </section>
   </section>
 </template>
 
@@ -108,5 +161,32 @@ export default defineComponent({
 .card p {
   margin: 0.25rem 0 0;
   color: #5a6a60;
+}
+
+.shopping-list-section {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.shopping-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shopping-list-header h3 {
+  margin: 0;
+}
+
+.shopping-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checked {
+  text-decoration: line-through;
+  opacity: 0.75;
 }
 </style>

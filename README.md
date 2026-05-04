@@ -104,6 +104,16 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Uses recommendation next-purchase helper
   - Shows suggested purchases sorted by usefulness
   - Shows ingredient, unlocked/improved drink count, and related drink names
+- Shared shopping list state (local composable):
+  - Persists shopping list items in localStorage with safe parse fallback to empty list
+  - Prevents duplicates by item name (case-insensitive)
+  - Exposes `shoppingListItems`, `addShoppingListItem`, `toggleShoppingListItem`, `removeShoppingListItem`, and `clearCheckedShoppingListItems`
+- Drink detail view updates:
+  - Adds missing ingredients to shopping list with source drink metadata
+  - Keeps existing add-to-inventory flow unchanged
+- Shopping Suggestions view updates:
+  - Shows current shopping list below recommendations
+  - Supports check/uncheck, remove item, and clear checked items
 
 ## Planned MVP features
 
@@ -170,6 +180,8 @@ src/
       types.ts
     inventory/
       types.ts
+    shopping/
+      useShoppingList.ts
     recommendations/
       recommendationService.ts
       types.ts

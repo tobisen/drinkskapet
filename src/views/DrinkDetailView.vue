@@ -3,6 +3,7 @@ import { defineComponent } from 'vue'
 import { seedDrinks } from '../data/seedDrinks'
 import { useInventory } from '../features/inventory/useInventory'
 import { useDrinkFavorites } from '../features/drinks/useDrinkFavorites'
+import { useShoppingList } from '../features/shopping/useShoppingList'
 import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
 import type { DrinkRecipe } from '../features/drinks/types'
 import type { InventoryCategory } from '../features/inventory/types'
@@ -24,8 +25,11 @@ const text = {
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
     addToInventory: 'Lägg till i inventering',
+    addToShoppingList: 'Lägg till i inköpslista',
     addedToInventory: 'Tillagd i inventering.',
     alreadyInInventory: 'Finns redan i inventeringen.',
+    addedToShoppingList: 'Tillagd i inköpslistan.',
+    alreadyInShoppingList: 'Finns redan i inköpslistan.',
   },
   en: {
     backToDrinks: 'Back to Drinks',
@@ -43,8 +47,11 @@ const text = {
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
     addToInventory: 'Add to inventory',
+    addToShoppingList: 'Add to shopping list',
     addedToInventory: 'Added to inventory.',
     alreadyInInventory: 'Already exists in inventory.',
+    addedToShoppingList: 'Added to shopping list.',
+    alreadyInShoppingList: 'Already exists in shopping list.',
   },
 } as const
 
@@ -91,7 +98,9 @@ export default defineComponent({
     return {
       inventoryStore: useInventory(),
       drinkFavoritesStore: useDrinkFavorites(),
+      shoppingListStore: useShoppingList(),
       ingredientFeedback: {} as Record<string, 'added' | 'exists'>,
+      shoppingFeedback: {} as Record<string, 'added' | 'exists'>,
     }
   },
   computed: {
@@ -197,6 +206,36 @@ export default defineComponent({
 
       return ''
     },
+    addMissingIngredientToShoppingList(ingredientName: string) {
+      if (!this.drink) {
+        return
+      }
+
+      const added = this.shoppingListStore.addShoppingListItem({
+        name: ingredientName,
+        category: getDefaultCategoryForIngredient(ingredientName),
+        sourceDrinkId: this.drink.id,
+        sourceDrinkName: this.drink.name,
+      })
+
+      this.shoppingFeedback = {
+        ...this.shoppingFeedback,
+        [ingredientName]: added ? 'added' : 'exists',
+      }
+    },
+    getShoppingFeedback(ingredientName: string): string {
+      const status = this.shoppingFeedback[ingredientName]
+
+      if (status === 'added') {
+        return this.t.addedToShoppingList
+      }
+
+      if (status === 'exists') {
+        return this.t.alreadyInShoppingList
+      }
+
+      return ''
+    },
   },
 })
 </script>
@@ -235,12 +274,22 @@ export default defineComponent({
         <ul>
           <li v-for="missing in drinkRecommendationEntry.missingIngredients" :key="missing.name" class="missing-row">
             <span>{{ missing.name }}</span>
-            <button type="button" @click="addMissingIngredientToInventory(missing.name)">
-              {{ t.addToInventory }}
-            </button>
-            <span v-if="getIngredientFeedback(missing.name)" class="feedback-message">
-              {{ getIngredientFeedback(missing.name) }}
-            </span>
+            <div class="missing-actions">
+              <button type="button" @click="addMissingIngredientToInventory(missing.name)">
+                {{ t.addToInventory }}
+              </button>
+              <button type="button" @click="addMissingIngredientToShoppingList(missing.name)">
+                {{ t.addToShoppingList }}
+              </button>
+            </div>
+            <div class="feedback-group">
+              <span v-if="getIngredientFeedback(missing.name)" class="feedback-message">
+                {{ getIngredientFeedback(missing.name) }}
+              </span>
+              <span v-if="getShoppingFeedback(missing.name)" class="feedback-message">
+                {{ getShoppingFeedback(missing.name) }}
+              </span>
+            </div>
           </li>
         </ul>
       </div>
@@ -258,6 +307,19 @@ export default defineComponent({
     </article>
   </section>
 </template>
+
+<style scoped>
+.missing-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.feedback-group {
+  display: grid;
+  gap: 0.2rem;
+}
+</style>
 
 <style scoped>
 .detail-view {
