@@ -19,6 +19,9 @@ const text = {
     glass: 'Glas',
     tags: 'Taggar',
     status: 'Status',
+    flavorProfile: 'Smakprofil',
+    servingNotes: 'Serveringstips',
+    shortHistory: 'Kort historik',
     canMakeNow: 'Kan göra nu',
     missingOne: 'Saknar en ingrediens',
     missingMultiple: 'Saknar flera ingredienser',
@@ -41,6 +44,9 @@ const text = {
     glass: 'Glass',
     tags: 'Tags',
     status: 'Status',
+    flavorProfile: 'Flavor profile',
+    servingNotes: 'Serving notes',
+    shortHistory: 'Short history',
     canMakeNow: 'Can Make Now',
     missingOne: 'Missing One Ingredient',
     missingMultiple: 'Missing Multiple Ingredients',
@@ -101,6 +107,7 @@ export default defineComponent({
       shoppingListStore: useShoppingList(),
       ingredientFeedback: {} as Record<string, 'added' | 'exists'>,
       shoppingFeedback: {} as Record<string, 'added' | 'exists'>,
+      showDrinkImage: true,
     }
   },
   computed: {
@@ -158,6 +165,9 @@ export default defineComponent({
     },
   },
   methods: {
+    handleDrinkImageError() {
+      this.showDrinkImage = false
+    },
     toggleFavorite() {
       if (!this.drink) {
         return
@@ -237,6 +247,11 @@ export default defineComponent({
       return ''
     },
   },
+  watch: {
+    drinkId() {
+      this.showDrinkImage = true
+    },
+  },
 })
 </script>
 
@@ -250,6 +265,15 @@ export default defineComponent({
     </div>
 
     <article v-else class="detail-card">
+      <img
+        v-if="drink.imageUrl && showDrinkImage"
+        :src="drink.imageUrl"
+        :alt="drink.imageAlt || drink.name"
+        class="drink-image"
+        loading="lazy"
+        @error="handleDrinkImageError"
+      />
+
       <div class="title-row">
         <h2>{{ drink.name }}</h2>
         <button type="button" @click="toggleFavorite">
@@ -258,6 +282,11 @@ export default defineComponent({
       </div>
 
       <p>{{ drink.description }}</p>
+      <p v-if="drink.flavorProfile && drink.flavorProfile.length > 0">
+        <strong>{{ t.flavorProfile }}:</strong> {{ drink.flavorProfile.join(', ') }}
+      </p>
+      <p v-if="drink.servingNotes"><strong>{{ t.servingNotes }}:</strong> {{ drink.servingNotes }}</p>
+      <p v-if="drink.shortHistory"><strong>{{ t.shortHistory }}:</strong> {{ drink.shortHistory }}</p>
       <p><strong>{{ t.status }}:</strong> {{ drinkStatusLabel }}</p>
 
       <div>
@@ -334,6 +363,13 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+
+.drink-image {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: 0.5rem;
 }
 
 .title-row h2,

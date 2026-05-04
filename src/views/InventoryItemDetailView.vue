@@ -3,7 +3,9 @@ import { defineComponent } from 'vue'
 import { useInventory } from '../features/inventory/useInventory'
 import { inventoryCategories } from '../data/inventoryCategories'
 import { seedDrinks } from '../data/seedDrinks'
+import { ingredientCatalog } from '../data/ingredientCatalog'
 import type { InventoryCategory } from '../features/inventory/types'
+import type { IngredientInfo } from '../features/drinks/types'
 import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
 
 interface EditFormState {
@@ -33,6 +35,10 @@ const text = {
     barcode: 'Streckkod',
     articleNumber: 'Artikelnummer',
     relatedDrinks: 'Relaterade drinkar',
+    ingredientInfo: 'Ingrediensinformation',
+    ingredientDescription: 'Beskrivning',
+    ingredientServingNotes: 'Serveringstips',
+    ingredientUsageTips: 'Användningstips',
     relatedCanMakeNow: 'Kan göra nu med denna produkt',
     relatedMissingOne: 'Nära match, saknar en ingrediens',
     relatedOther: 'Andra recept med denna produkt',
@@ -63,6 +69,10 @@ const text = {
     barcode: 'Barcode',
     articleNumber: 'Article number',
     relatedDrinks: 'Related drinks',
+    ingredientInfo: 'Ingredient information',
+    ingredientDescription: 'Description',
+    ingredientServingNotes: 'Serving notes',
+    ingredientUsageTips: 'Usage tips',
     relatedCanMakeNow: 'Can make now with this item',
     relatedMissingOne: 'Close matches, missing one ingredient',
     relatedOther: 'Other recipes using this item',
@@ -96,6 +106,7 @@ export default defineComponent({
       categories: inventoryCategories,
       isEditing: false,
       validationMessage: '',
+      showIngredientImage: true,
       editForm: {
         name: '',
         category: '',
@@ -162,8 +173,28 @@ export default defineComponent({
     relatedOtherRecipes() {
       return this.relatedRecommendations.missingMultipleIngredients
     },
+    matchedIngredientInfo(): IngredientInfo | null {
+      if (!this.item) {
+        return null
+      }
+
+      const itemTerms = [this.item.name, this.item.subCategory ?? '', this.item.brand ?? '']
+        .map(normalize)
+        .filter((term) => term.length > 0)
+
+      return (
+        ingredientCatalog.find((ingredient) =>
+          ingredient.matchingTerms
+            .map(normalize)
+            .some((term) => itemTerms.includes(term)),
+        ) ?? null
+      )
+    },
   },
   methods: {
+    handleIngredientImageError() {
+      this.showIngredientImage = false
+    },
     startEdit() {
       if (!this.item) {
         return
@@ -266,6 +297,11 @@ export default defineComponent({
       this.inventoryStore.toggleInventoryFavorite(this.item.id)
     },
   },
+  watch: {
+    itemId() {
+      this.showIngredientImage = true
+    },
+  },
 })
 </script>
 
@@ -341,6 +377,21 @@ export default defineComponent({
         <p v-if="item.barcode"><strong>{{ t.barcode }}:</strong> {{ item.barcode }}</p>
         <p v-if="item.articleNumber"><strong>{{ t.articleNumber }}:</strong> {{ item.articleNumber }}</p>
       </template>
+
+      <div v-if="matchedIngredientInfo">
+        <h3>{{ t.ingredientInfo }}</h3>
+        <img
+          v-if="showIngredientImage"
+          :src="matchedIngredientInfo.imageUrl"
+          :alt="matchedIngredientInfo.imageAlt"
+          class="ingredient-image"
+          loading="lazy"
+          @error="handleIngredientImageError"
+        />
+        <p><strong>{{ t.ingredientDescription }}:</strong> {{ matchedIngredientInfo.description }}</p>
+        <p><strong>{{ t.ingredientServingNotes }}:</strong> {{ matchedIngredientInfo.servingNotes }}</p>
+        <p><strong>{{ t.ingredientUsageTips }}:</strong> {{ matchedIngredientInfo.usageTips }}</p>
+      </div>
 
       <div>
         <h3>{{ t.relatedDrinks }}</h3>
@@ -448,5 +499,12 @@ export default defineComponent({
 .detail-card a {
   color: #cbe6da;
   text-decoration: none;
+}
+
+.ingredient-image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 0.5rem;
 }
 </style>

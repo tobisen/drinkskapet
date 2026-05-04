@@ -550,3 +550,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional wine-specific filters (style, favorites-only, search) in the Wine view.
+
+## 2026-05-04 (Ingredient and drink metadata support)
+
+### Changed
+- Extended `src/features/drinks/types.ts` with `IngredientInfo` and richer `DrinkRecipe` metadata fields (`imageAlt`, `flavorProfile`, `servingNotes`, `shortHistory`).
+- Added `src/data/ingredientCatalog.ts` with initial metadata for common ingredients used by current seed drinks.
+- Updated `src/data/seedDrinks.ts` with local image placeholder paths and richer metadata fields.
+- Updated `src/views/DrinkDetailView.vue` to render drink image and metadata when available, with graceful image fallback.
+- Updated `src/views/InventoryItemDetailView.vue` to match inventory items to ingredient metadata and show image, description, serving notes, and usage tips.
+
+### Why
+- Improves detail pages with practical context while keeping logic local and deterministic.
+- Establishes a scalable metadata layer for future content quality improvements.
+
+### Next
+- Add local image assets for drinks and ingredients to replace current placeholder paths.

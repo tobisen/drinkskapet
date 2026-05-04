@@ -39,7 +39,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Drink recipes and drink ingredients
 - Seed data:
   - Inventory categories
-  - 15 classic and simple drinks with ingredient `matchingTerms`, including one non-alcoholic option
+  - Ingredient catalog with descriptions, serving tips and local image placeholders
+  - 15 classic and simple drinks with ingredient `matchingTerms`, richer metadata and local image placeholders, including one non-alcoholic option
 - Recommendation service:
   - Matches inventory items against ingredient `matchingTerms`
   - Classifies drinks into `canMakeNow`, `missingOneIngredient`, `missingMultipleIngredients`
@@ -70,6 +71,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Supports edit mode (name, category, subCategory, brand, quantity, volumeMl, alcoholPercentage, barcode, articleNumber) and delete with confirm
   - Validates required fields and numeric ranges
   - Shows item details and favorite toggle
+  - Shows matched ingredient metadata when available (image, description, serving notes, usage tips)
   - Shows related drinks grouped by can-make-now, close matches, and other recipes using the item
   - Includes back link to Inventory and clear not-found state
 - Shared drink favorites state (local composable):
@@ -89,6 +91,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Route: `/drinks/:id`
   - Loads drink from seed data by route id
   - Shows make-now status and missing ingredients via recommendation service
+  - Shows drink image and richer metadata when available (flavor profile, serving notes, short history)
   - Supports adding missing ingredients directly to inventory with duplicate checks
   - Shows name, description, ingredients, method, glass, tags, and favorite toggle
   - Includes back link to Drinks and clear not-found state
@@ -195,6 +198,7 @@ src/
   components/
   data/
     demoInventory.ts
+    ingredientCatalog.ts
     inventoryCategories.ts
     seedDrinks.ts
   features/
