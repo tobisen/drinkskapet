@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { inventoryCategories } from '../data/inventoryCategories'
-import type { InventoryCategory, InventoryItem } from '../features/inventory/types'
+import { useInventory } from '../features/inventory/useInventory'
+import type { InventoryCategory } from '../features/inventory/types'
 
 interface InventoryFormState {
   name: string
@@ -40,31 +41,7 @@ export default defineComponent({
   data() {
     return {
       categories: inventoryCategories,
-      items: [
-        {
-          id: 'demo-gin',
-          name: 'Dry Gin',
-          category: 'spirits',
-          brand: 'Beefeater',
-          quantity: 1,
-          isFavorite: true,
-        },
-        {
-          id: 'demo-vodka',
-          name: 'Vodka',
-          category: 'spirits',
-          brand: 'Absolut',
-          quantity: 1,
-          isFavorite: false,
-        },
-        {
-          id: 'demo-tonic',
-          name: 'Tonic Water',
-          category: 'mixers',
-          quantity: 4,
-          isFavorite: false,
-        },
-      ] as InventoryItem[],
+      inventoryStore: useInventory(),
       form: {
         name: '',
         category: 'spirits',
@@ -79,23 +56,16 @@ export default defineComponent({
           'sv') as LanguageCode
       return text[selected]
     },
+    items() {
+      return this.inventoryStore.inventoryItems
+    },
   },
   methods: {
     addItem() {
-      const name = this.form.name.trim()
-      const brand = this.form.brand.trim()
-
-      if (!name) {
-        return
-      }
-
-      this.items.unshift({
-        id: `item-${Date.now()}`,
-        name,
+      this.inventoryStore.addInventoryItem({
+        name: this.form.name,
         category: this.form.category,
-        brand: brand || undefined,
-        quantity: 1,
-        isFavorite: false,
+        brand: this.form.brand,
       })
 
       this.form.name = ''
@@ -103,16 +73,7 @@ export default defineComponent({
       this.form.category = 'spirits'
     },
     toggleFavorite(itemId: string) {
-      this.items = this.items.map((item) => {
-        if (item.id !== itemId) {
-          return item
-        }
-
-        return {
-          ...item,
-          isFavorite: !item.isFavorite,
-        }
-      })
+      this.inventoryStore.toggleInventoryFavorite(itemId)
     },
     getCategoryLabel(categoryId: InventoryCategory): string {
       return (

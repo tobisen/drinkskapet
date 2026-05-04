@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { demoInventory } from '../data/demoInventory'
+import { useInventory } from '../features/inventory/useInventory'
 import { seedDrinks } from '../data/seedDrinks'
 
 const text = {
@@ -26,8 +26,16 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'FavoritesView',
+  data() {
+    return {
+      inventoryStore: useInventory(),
+    }
+  },
   inject: ['appLanguage'],
   computed: {
+    inventoryItems() {
+      return this.inventoryStore.inventoryItems
+    },
     t() {
       const selected =
         ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
@@ -35,7 +43,7 @@ export default defineComponent({
       return text[selected]
     },
     favoriteInventoryItems() {
-      return demoInventory.filter((item) => item.isFavorite)
+      return this.inventoryItems.filter((item: { isFavorite: boolean }) => item.isFavorite)
     },
     favoriteDrinks() {
       return seedDrinks.filter((drink) => drink.isFavorite)

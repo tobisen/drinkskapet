@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { demoInventory } from '../data/demoInventory'
+import { useInventory } from '../features/inventory/useInventory'
 import { seedDrinks } from '../data/seedDrinks'
 import {
   getDrinkRecommendations,
@@ -36,8 +36,16 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'DiscoverView',
+  data() {
+    return {
+      inventoryStore: useInventory(),
+    }
+  },
   inject: ['appLanguage'],
   computed: {
+    inventoryItems() {
+      return this.inventoryStore.inventoryItems
+    },
     t() {
       const selected =
         ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
@@ -45,7 +53,7 @@ export default defineComponent({
       return text[selected]
     },
     recommendations() {
-      return getDrinkRecommendations(demoInventory, seedDrinks)
+      return getDrinkRecommendations(this.inventoryItems, seedDrinks)
     },
     easyDrinks() {
       return this.recommendations.canMakeNow.slice(0, 4)
@@ -57,7 +65,7 @@ export default defineComponent({
       return getSuggestedNextPurchases(this.recommendations).slice(0, 4)
     },
     currentCategories() {
-      return Array.from(new Set(demoInventory.map((item) => item.category))).sort()
+      return Array.from(new Set(this.inventoryItems.map((item: { category: string }) => item.category))).sort()
     },
   },
 })

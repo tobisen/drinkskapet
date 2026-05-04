@@ -215,3 +215,17 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add lightweight unit tests for ingredient matching stability across synonyms.
+
+## 2026-05-04 (Shared inventory composable)
+
+### Changed
+- Added `src/features/inventory/useInventory.ts` as a shared in-memory inventory state composable initialized from `demoInventory`.
+- Exposed `inventoryItems`, `addInventoryItem`, and `toggleInventoryFavorite`.
+- Updated `InventoryView`, `DashboardView`, `DrinksView`, `FavoritesView`, `DiscoverView`, and `ShoppingSuggestionsView` to use shared inventory state instead of direct demo inventory imports where relevant.
+
+### Why
+- Keeps inventory behavior consistent across views without introducing persistence or backend complexity.
+- Establishes a minimal shared-state baseline for future feature work.
+
+### Next
+- Add optional reset helper for demo sessions and upcoming tests.

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { demoInventory } from '../data/demoInventory'
+import { useInventory } from '../features/inventory/useInventory'
 import { seedDrinks } from '../data/seedDrinks'
 import {
   getDrinkRecommendations,
@@ -28,8 +28,16 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'ShoppingSuggestionsView',
+  data() {
+    return {
+      inventoryStore: useInventory(),
+    }
+  },
   inject: ['appLanguage'],
   computed: {
+    inventoryItems() {
+      return this.inventoryStore.inventoryItems
+    },
     t() {
       const selected =
         ((this.appLanguage as { selected: LanguageCode } | undefined)?.selected ??
@@ -37,7 +45,7 @@ export default defineComponent({
       return text[selected]
     },
     recommendations() {
-      return getDrinkRecommendations(demoInventory, seedDrinks)
+      return getDrinkRecommendations(this.inventoryItems, seedDrinks)
     },
     suggestions() {
       return getSuggestedNextPurchases(this.recommendations)
