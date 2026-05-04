@@ -100,3 +100,19 @@ This file tracks meaningful project decisions and implementation steps.
 ### Next
 - Replace demo inventory with user-managed inventory data.
 - Expand dashboard with missing-multiple and quick action links.
+
+## 2026-05-04 (First usable inventory view)
+
+### Changed
+- Updated `src/views/InventoryView.vue` with local component state and a small demo inventory list.
+- Added a minimal add-item form for `name`, `category`, and optional `brand`.
+- Reused `inventoryCategories` seed data for category options.
+- Added favorite toggle support per inventory item.
+
+### Why
+- Creates the first interactive inventory management flow without adding persistence or backend complexity.
+- Provides a practical UI baseline for later connection to shared state and recommendation features.
+
+### Next
+- Connect inventory state to dashboard and drink recommendations.
+- Add remove/edit actions for inventory items.

@@ -15,7 +15,7 @@ The app should answer:
 
 ## Current status
 
-Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mobile-first views, initial domain types and seed data, a rule-based recommendation service, and a first dashboard recommendation summary using demo inventory.
+Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mobile-first views, initial domain types and seed data, a rule-based recommendation service, a dashboard summary using demo inventory, and a first usable local-state inventory view.
 
 ## Implemented features
 
@@ -43,6 +43,10 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows count/list for drinks that can be made now
   - Shows drinks missing one ingredient
   - Shows top suggested next purchases
+- Inventory view (local state):
+  - Shows a small demo inventory list
+  - Includes a minimal add-item form (`name`, `category`, optional `brand`)
+  - Supports toggling `isFavorite` per item
 
 ## Planned MVP features
 
@@ -154,3 +158,4 @@ Expected Vercel settings:
 - No backend, database, external services or PWA setup is included yet.
 - Recommendation logic is deterministic and framework-independent.
 - Dashboard summary currently uses hardcoded demo inventory.
+- Inventory data is currently local view state only (no persistence).
