@@ -165,6 +165,12 @@ Build for production:
 npm run build
 ```
 
+Run unit tests:
+
+```bash
+npm run test
+```
+
 Preview production build:
 
 ```bash
@@ -241,6 +247,7 @@ Expected Vercel settings:
 - No authentication is implemented yet.
 - No backend, database, external services or PWA setup is included yet.
 - Recommendation logic is deterministic and framework-independent.
+- Recommendation domain logic has basic unit tests for classification and next-purchase suggestions.
 - Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts` with a few favorite items marked.
 - Dashboard summary currently uses demo inventory data only.
 - Inventory data is persisted in localStorage via shared inventory composable.

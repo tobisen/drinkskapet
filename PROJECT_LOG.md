@@ -497,3 +497,22 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add focused unit tests for recommendation and suggestion domain logic.
+
+## 2026-05-04 (Basic recommendation unit tests)
+
+### Changed
+- Added minimal unit test setup with Vitest.
+- Added `src/features/recommendations/recommendationService.test.ts`.
+- Added tests for:
+  - drinks that can be made now
+  - drinks missing one ingredient
+  - drinks missing multiple ingredients
+  - next-purchase suggestions from missing ingredients
+- Added `npm run test` script to `package.json`.
+
+### Why
+- Protects core recommendation behavior with fast domain-level tests.
+- Keeps testing focused on deterministic logic, not UI.
+
+### Next
+- Add edge-case tests for synonym matching and duplicate ingredient term grouping.
