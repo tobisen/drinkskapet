@@ -7,7 +7,12 @@ import type { InventoryCategory } from '../features/inventory/types'
 interface InventoryFormState {
   name: string
   category: InventoryCategory | ''
+  subCategory: string
   brand: string
+  volumeMl: string
+  alcoholPercentage: string
+  barcode: string
+  articleNumber: string
 }
 
 interface InventoryFilters {
@@ -23,12 +28,19 @@ const text = {
     name: 'Namn',
     category: 'Kategori',
     brand: 'Varumärke (valfritt)',
+    subCategory: 'Underkategori (valfritt)',
+    volumeMl: 'Volym ml (valfritt)',
+    alcoholPercentage: 'Alkoholhalt % (valfritt)',
+    barcode: 'Streckkod (valfritt)',
+    articleNumber: 'Artikelnummer (valfritt)',
     addItem: 'Lägg till',
     resetInventory: 'Återställ demo-inventering',
     resetInventoryAria: 'Återställ inventeringen till demo-data',
     validationNameRequired: 'Ange ett namn på produkten.',
     validationCategoryRequired: 'Välj en kategori.',
     validationDuplicate: 'Produkten finns redan med samma namn och varumärke.',
+    validationVolumeInvalid: 'Volym måste vara ett tal större än 0.',
+    validationAlcoholInvalid: 'Alkoholhalt måste vara ett tal mellan 0 och 100.',
     filtersTitle: 'Filter',
     searchLabel: 'Sök',
     searchPlaceholder: 'Sök på namn eller varumärke',
@@ -46,12 +58,19 @@ const text = {
     name: 'Name',
     category: 'Category',
     brand: 'Brand (optional)',
+    subCategory: 'Sub-category (optional)',
+    volumeMl: 'Volume ml (optional)',
+    alcoholPercentage: 'Alcohol % (optional)',
+    barcode: 'Barcode (optional)',
+    articleNumber: 'Article number (optional)',
     addItem: 'Add Item',
     resetInventory: 'Reset Demo Inventory',
     resetInventoryAria: 'Reset inventory to demo data',
     validationNameRequired: 'Please enter an item name.',
     validationCategoryRequired: 'Please select a category.',
     validationDuplicate: 'An item with the same name and brand already exists.',
+    validationVolumeInvalid: 'Volume must be a number greater than 0.',
+    validationAlcoholInvalid: 'Alcohol must be a number between 0 and 100.',
     filtersTitle: 'Filters',
     searchLabel: 'Search',
     searchPlaceholder: 'Search by name or brand',
@@ -77,7 +96,12 @@ export default defineComponent({
       form: {
         name: '',
         category: '',
+        subCategory: '',
         brand: '',
+        volumeMl: '',
+        alcoholPercentage: '',
+        barcode: '',
+        articleNumber: '',
       } as InventoryFormState,
       filters: {
         search: '',
@@ -126,8 +150,13 @@ export default defineComponent({
     },
     addItem() {
       const name = this.form.name.trim()
+      const subCategory = this.form.subCategory.trim()
       const brand = this.form.brand.trim()
+      const barcode = this.form.barcode.trim()
+      const articleNumber = this.form.articleNumber.trim()
       const category = this.form.category
+      const volumeRaw = this.form.volumeMl.trim()
+      const alcoholRaw = this.form.alcoholPercentage.trim()
 
       if (!name) {
         this.validationMessage = this.t.validationNameRequired
@@ -152,15 +181,45 @@ export default defineComponent({
         return
       }
 
+      let volumeMl: number | undefined
+      if (volumeRaw) {
+        const parsedVolume = Number(volumeRaw)
+        if (!Number.isFinite(parsedVolume) || parsedVolume <= 0) {
+          this.validationMessage = this.t.validationVolumeInvalid
+          return
+        }
+        volumeMl = parsedVolume
+      }
+
+      let alcoholPercentage: number | undefined
+      if (alcoholRaw) {
+        const parsedAlcohol = Number(alcoholRaw)
+        if (!Number.isFinite(parsedAlcohol) || parsedAlcohol < 0 || parsedAlcohol > 100) {
+          this.validationMessage = this.t.validationAlcoholInvalid
+          return
+        }
+        alcoholPercentage = parsedAlcohol
+      }
+
       this.inventoryStore.addInventoryItem({
         name,
         category,
+        subCategory,
         brand,
+        volumeMl,
+        alcoholPercentage,
+        barcode,
+        articleNumber,
       })
 
       this.validationMessage = ''
       this.form.name = ''
+      this.form.subCategory = ''
       this.form.brand = ''
+      this.form.volumeMl = ''
+      this.form.alcoholPercentage = ''
+      this.form.barcode = ''
+      this.form.articleNumber = ''
       this.form.category = ''
     },
     resetInventory() {
@@ -198,6 +257,21 @@ export default defineComponent({
 
       <label for="item-brand">{{ t.brand }}</label>
       <input id="item-brand" v-model="form.brand" type="text" @input="clearValidationMessage" />
+
+      <label for="item-subcategory">{{ t.subCategory }}</label>
+      <input id="item-subcategory" v-model="form.subCategory" type="text" @input="clearValidationMessage" />
+
+      <label for="item-volume">{{ t.volumeMl }}</label>
+      <input id="item-volume" v-model="form.volumeMl" type="text" inputmode="decimal" @input="clearValidationMessage" />
+
+      <label for="item-alcohol">{{ t.alcoholPercentage }}</label>
+      <input id="item-alcohol" v-model="form.alcoholPercentage" type="text" inputmode="decimal" @input="clearValidationMessage" />
+
+      <label for="item-barcode">{{ t.barcode }}</label>
+      <input id="item-barcode" v-model="form.barcode" type="text" @input="clearValidationMessage" />
+
+      <label for="item-article-number">{{ t.articleNumber }}</label>
+      <input id="item-article-number" v-model="form.articleNumber" type="text" @input="clearValidationMessage" />
 
       <button type="submit">{{ t.addItem }}</button>
       <button

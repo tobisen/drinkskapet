@@ -5,15 +5,25 @@ import type { InventoryCategory, InventoryItem } from './types'
 interface AddInventoryItemInput {
   name: string
   category: InventoryCategory
+  subCategory?: string
   brand?: string
+  volumeMl?: number
+  alcoholPercentage?: number
+  barcode?: string
+  articleNumber?: string
 }
 
 interface UpdateInventoryItemInput {
   id: string
   name: string
   category: InventoryCategory
+  subCategory?: string
   brand?: string
   quantity: number
+  volumeMl?: number
+  alcoholPercentage?: number
+  barcode?: string
+  articleNumber?: string
 }
 
 const INVENTORY_STORAGE_KEY = 'drinkskapet.inventory.v1'
@@ -75,13 +85,21 @@ function addInventoryItem(input: AddInventoryItemInput): void {
     return
   }
 
+  const subCategory = input.subCategory?.trim()
   const brand = input.brand?.trim()
+  const barcode = input.barcode?.trim()
+  const articleNumber = input.articleNumber?.trim()
 
   inventoryItems.value.unshift({
     id: `item-${Date.now()}`,
     name,
     category: input.category,
+    subCategory: subCategory || undefined,
     brand: brand || undefined,
+    volumeMl: input.volumeMl,
+    alcoholPercentage: input.alcoholPercentage,
+    barcode: barcode || undefined,
+    articleNumber: articleNumber || undefined,
     quantity: 1,
     isFavorite: false,
   })
@@ -96,7 +114,10 @@ function updateInventoryItem(input: UpdateInventoryItemInput): void {
     return
   }
 
+  const subCategory = input.subCategory?.trim()
   const brand = input.brand?.trim()
+  const barcode = input.barcode?.trim()
+  const articleNumber = input.articleNumber?.trim()
 
   inventoryItems.value = inventoryItems.value.map((item) => {
     if (item.id !== input.id) {
@@ -107,8 +128,13 @@ function updateInventoryItem(input: UpdateInventoryItemInput): void {
       ...item,
       name,
       category: input.category,
+      subCategory: subCategory || undefined,
       brand: brand || undefined,
       quantity: Number.isFinite(input.quantity) ? Math.max(0, input.quantity) : item.quantity,
+      volumeMl: input.volumeMl,
+      alcoholPercentage: input.alcoholPercentage,
+      barcode: barcode || undefined,
+      articleNumber: articleNumber || undefined,
     }
   })
 

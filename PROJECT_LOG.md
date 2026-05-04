@@ -375,3 +375,29 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional duplicate check in detail edit mode similar to add-form behavior.
+
+## 2026-05-04 (Extended inventory add/edit fields)
+
+### Changed
+- Updated `src/views/InventoryView.vue` add form with optional fields:
+  - subCategory
+  - volumeMl
+  - alcoholPercentage
+  - barcode
+  - articleNumber
+- Updated `src/views/InventoryItemDetailView.vue` edit mode with the same optional fields.
+- Added safe numeric conversion rules:
+  - empty numeric input becomes `undefined`
+  - invalid numbers show validation error
+  - `alcoholPercentage` must be between 0 and 100 when provided
+  - `volumeMl` must be greater than 0 when provided
+- Kept required validation for name and category.
+- Trimmed string fields before saving.
+- Updated `src/features/inventory/useInventory.ts` add/update handlers to persist new optional fields.
+
+### Why
+- Improves product detail quality and ingredient matching precision.
+- Keeps data handling robust while staying fully client-side.
+
+### Next
+- Add optional duplicate checks in edit mode against other inventory items.

@@ -54,8 +54,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Reused across Dashboard, Inventory, Drinks, Favorites, Discover and Shopping Suggestions views
 - Inventory view (shared in-memory state):
   - Shows shared inventory items
-  - Includes a minimal add-item form (`name`, `category`, optional `brand`)
-  - Adds basic inline validation (required name/category, trimmed input, duplicate prevention by name+brand)
+  - Includes add form fields for `name`, `category`, `subCategory`, `brand`, `volumeMl`, `alcoholPercentage`, `barcode`, and `articleNumber`
+  - Adds inline validation (required name/category, trimmed input, duplicate prevention by name+brand, numeric range checks)
   - Adds local filters (search by name/brand, category, favorites-only)
   - Shows filtered results count and clear empty state
   - Clears form after successful add
@@ -64,7 +64,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Inventory item detail view:
   - Route: `/inventory/:id`
   - Loads item from shared inventory state by route id
-  - Supports edit mode (name, category, brand, quantity) and delete with confirm
+  - Supports edit mode (name, category, subCategory, brand, quantity, volumeMl, alcoholPercentage, barcode, articleNumber) and delete with confirm
+  - Validates required fields and numeric ranges
   - Shows item details and favorite toggle
   - Shows related drinks based on ingredient matching
   - Includes back link to Inventory and clear not-found state

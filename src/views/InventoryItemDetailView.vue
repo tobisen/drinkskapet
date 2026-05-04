@@ -8,8 +8,13 @@ import type { InventoryCategory } from '../features/inventory/types'
 interface EditFormState {
   name: string
   category: InventoryCategory | ''
+  subCategory: string
   brand: string
   quantity: number
+  volumeMl: string
+  alcoholPercentage: string
+  barcode: string
+  articleNumber: string
 }
 
 const text = {
@@ -37,6 +42,8 @@ const text = {
     deleteConfirm: 'Vill du ta bort den här produkten?',
     validationNameRequired: 'Ange ett namn.',
     validationCategoryRequired: 'Välj en kategori.',
+    validationVolumeInvalid: 'Volym måste vara ett tal större än 0.',
+    validationAlcoholInvalid: 'Alkoholhalt måste vara ett tal mellan 0 och 100.',
   },
   en: {
     backToInventory: 'Back to Inventory',
@@ -62,6 +69,8 @@ const text = {
     deleteConfirm: 'Do you want to delete this item?',
     validationNameRequired: 'Please enter a name.',
     validationCategoryRequired: 'Please select a category.',
+    validationVolumeInvalid: 'Volume must be a number greater than 0.',
+    validationAlcoholInvalid: 'Alcohol must be a number between 0 and 100.',
   },
 } as const
 
@@ -83,8 +92,13 @@ export default defineComponent({
       editForm: {
         name: '',
         category: '',
+        subCategory: '',
         brand: '',
         quantity: 1,
+        volumeMl: '',
+        alcoholPercentage: '',
+        barcode: '',
+        articleNumber: '',
       } as EditFormState,
     }
   },
@@ -130,8 +144,14 @@ export default defineComponent({
 
       this.editForm.name = this.item.name
       this.editForm.category = this.item.category
+      this.editForm.subCategory = this.item.subCategory ?? ''
       this.editForm.brand = this.item.brand ?? ''
       this.editForm.quantity = this.item.quantity
+      this.editForm.volumeMl = typeof this.item.volumeMl === 'number' ? String(this.item.volumeMl) : ''
+      this.editForm.alcoholPercentage =
+        typeof this.item.alcoholPercentage === 'number' ? String(this.item.alcoholPercentage) : ''
+      this.editForm.barcode = this.item.barcode ?? ''
+      this.editForm.articleNumber = this.item.articleNumber ?? ''
       this.validationMessage = ''
       this.isEditing = true
     },
@@ -145,8 +165,13 @@ export default defineComponent({
       }
 
       const name = this.editForm.name.trim()
+      const subCategory = this.editForm.subCategory.trim()
       const brand = this.editForm.brand.trim()
+      const barcode = this.editForm.barcode.trim()
+      const articleNumber = this.editForm.articleNumber.trim()
       const category = this.editForm.category
+      const volumeRaw = this.editForm.volumeMl.trim()
+      const alcoholRaw = this.editForm.alcoholPercentage.trim()
 
       if (!name) {
         this.validationMessage = this.t.validationNameRequired
@@ -158,12 +183,37 @@ export default defineComponent({
         return
       }
 
+      let volumeMl: number | undefined
+      if (volumeRaw) {
+        const parsedVolume = Number(volumeRaw)
+        if (!Number.isFinite(parsedVolume) || parsedVolume <= 0) {
+          this.validationMessage = this.t.validationVolumeInvalid
+          return
+        }
+        volumeMl = parsedVolume
+      }
+
+      let alcoholPercentage: number | undefined
+      if (alcoholRaw) {
+        const parsedAlcohol = Number(alcoholRaw)
+        if (!Number.isFinite(parsedAlcohol) || parsedAlcohol < 0 || parsedAlcohol > 100) {
+          this.validationMessage = this.t.validationAlcoholInvalid
+          return
+        }
+        alcoholPercentage = parsedAlcohol
+      }
+
       this.inventoryStore.updateInventoryItem({
         id: this.item.id,
         name,
         category,
+        subCategory,
         brand,
         quantity: Math.max(0, Number(this.editForm.quantity) || 0),
+        volumeMl,
+        alcoholPercentage,
+        barcode,
+        articleNumber,
       })
 
       this.validationMessage = ''
@@ -230,6 +280,21 @@ export default defineComponent({
 
         <label for="edit-brand">{{ t.brand }}</label>
         <input id="edit-brand" v-model="editForm.brand" type="text" />
+
+        <label for="edit-subcategory">{{ t.subCategory }}</label>
+        <input id="edit-subcategory" v-model="editForm.subCategory" type="text" />
+
+        <label for="edit-volume">{{ t.volumeMl }}</label>
+        <input id="edit-volume" v-model="editForm.volumeMl" type="text" inputmode="decimal" />
+
+        <label for="edit-alcohol">{{ t.alcoholPercentage }}</label>
+        <input id="edit-alcohol" v-model="editForm.alcoholPercentage" type="text" inputmode="decimal" />
+
+        <label for="edit-barcode">{{ t.barcode }}</label>
+        <input id="edit-barcode" v-model="editForm.barcode" type="text" />
+
+        <label for="edit-article-number">{{ t.articleNumber }}</label>
+        <input id="edit-article-number" v-model="editForm.articleNumber" type="text" />
 
         <label for="edit-quantity">{{ t.quantity }}</label>
         <input id="edit-quantity" v-model.number="editForm.quantity" type="number" min="0" step="1" />
