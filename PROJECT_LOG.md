@@ -340,3 +340,21 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add localized drink text in detail view and deep-link sharing improvements.
+
+## 2026-05-04 (Inventory item detail view)
+
+### Changed
+- Added `src/views/InventoryItemDetailView.vue`.
+- Added route `/inventory/:id` in `src/router/index.ts`.
+- Updated `src/views/InventoryView.vue` to link each item to its detail page.
+- Added detail content for inventory fields (name, brand, category, subCategory, volume, alcohol, quantity, barcode, article number).
+- Added inventory favorite toggle in detail view via `useInventory`.
+- Added related drinks section based on ingredient matching terms against the selected item.
+- Added back link to Inventory and clear not-found state for invalid ids.
+
+### Why
+- Makes inventory records easier to inspect and relate to potential drinks.
+- Keeps behavior fully client-side using existing shared state and seed data.
+
+### Next
+- Add richer category/subcategory display labels in detail view.

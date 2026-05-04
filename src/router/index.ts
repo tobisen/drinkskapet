@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '../views/DashboardView.vue'
 import InventoryView from '../views/InventoryView.vue'
+import InventoryItemDetailView from '../views/InventoryItemDetailView.vue'
 import DrinksView from '../views/DrinksView.vue'
 import DrinkDetailView from '../views/DrinkDetailView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
@@ -19,6 +20,11 @@ const router = createRouter({
       path: '/inventory',
       name: 'inventory',
       component: InventoryView,
+    },
+    {
+      path: '/inventory/:id',
+      name: 'inventory-item-detail',
+      component: InventoryItemDetailView,
     },
     {
       path: '/drinks',

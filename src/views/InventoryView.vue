@@ -240,7 +240,7 @@ export default defineComponent({
     <ul v-if="filteredItems.length > 0" class="inventory-list">
       <li v-for="item in filteredItems" :key="item.id" class="inventory-item">
         <div>
-          <strong>{{ item.name }}</strong>
+          <RouterLink class="item-link" :to="`/inventory/${item.id}`">{{ item.name }}</RouterLink>
           <p>
             {{ getCategoryLabel(item.category) }}
             <span v-if="item.brand">· {{ item.brand }}</span>
@@ -355,5 +355,11 @@ export default defineComponent({
   background: #fff;
   border-radius: 0.4rem;
   padding: 0.45rem 0.6rem;
+}
+
+.item-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
 }
 </style>
