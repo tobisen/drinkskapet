@@ -277,3 +277,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional combined "reset all demo data" action in a future settings view.
+
+## 2026-05-04 (Inventory form validation improvements)
+
+### Changed
+- Updated `src/views/InventoryView.vue` with basic form validation.
+- Added required checks for item name and category.
+- Added trim handling for name and brand before saving.
+- Added duplicate prevention for same name + brand (case-insensitive).
+- Added a small inline validation message for invalid form submissions.
+- Kept form clear behavior for successful add only.
+
+### Why
+- Prevents common input issues and accidental duplicate inventory entries.
+- Improves data quality while keeping the form simple and mobile-friendly.
+
+### Next
+- Consider adding optional quantity input and validation in the same form.

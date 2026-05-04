@@ -53,6 +53,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Inventory view (shared in-memory state):
   - Shows shared inventory items
   - Includes a minimal add-item form (`name`, `category`, optional `brand`)
+  - Adds basic inline validation (required name/category, trimmed input, duplicate prevention by name+brand)
+  - Clears form after successful add
   - Supports toggling `isFavorite` per item
 - Shared drink favorites state (local composable):
   - Initializes favorite drink ids from localStorage when valid data exists
