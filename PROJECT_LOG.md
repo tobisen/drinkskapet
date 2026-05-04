@@ -164,3 +164,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Connect favorites to interactive toggles from inventory and drinks views.
+
+## 2026-05-04 (First usable discover view)
+
+### Changed
+- Updated `src/views/DiscoverView.vue` to use `seedDrinks` and `demoInventory`.
+- Added read-only discovery sections for:
+  - easy drinks to try
+  - drinks close to your inventory
+  - ingredients or categories to explore next
+- Reused recommendation service output to drive close-drink and next-purchase insights.
+
+### Why
+- Delivers a practical discovery flow based on existing deterministic seed/demo data.
+- Expands product value beyond direct recommendations while keeping implementation minimal.
+
+### Next
+- Add localization for drink descriptions and ingredient names in Discover.

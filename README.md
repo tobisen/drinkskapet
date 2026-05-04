@@ -57,6 +57,11 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows favorite inventory items
   - Shows favorite drinks
   - Shows a clear empty state when no favorite drinks exist
+- Discover view (read-only):
+  - Uses `seedDrinks` and `demoInventory`
+  - Shows easy drinks to try
+  - Shows drinks close to your inventory
+  - Shows ingredients or categories to explore next
 
 ## Planned MVP features
 
