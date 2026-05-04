@@ -8,6 +8,14 @@ interface AddInventoryItemInput {
   brand?: string
 }
 
+interface UpdateInventoryItemInput {
+  id: string
+  name: string
+  category: InventoryCategory
+  brand?: string
+  quantity: number
+}
+
 const INVENTORY_STORAGE_KEY = 'drinkskapet.inventory.v1'
 
 function cloneDemoInventory(): InventoryItem[] {
@@ -81,6 +89,37 @@ function addInventoryItem(input: AddInventoryItemInput): void {
   writeInventoryToStorage(inventoryItems.value)
 }
 
+function updateInventoryItem(input: UpdateInventoryItemInput): void {
+  const name = input.name.trim()
+
+  if (!name) {
+    return
+  }
+
+  const brand = input.brand?.trim()
+
+  inventoryItems.value = inventoryItems.value.map((item) => {
+    if (item.id !== input.id) {
+      return item
+    }
+
+    return {
+      ...item,
+      name,
+      category: input.category,
+      brand: brand || undefined,
+      quantity: Number.isFinite(input.quantity) ? Math.max(0, input.quantity) : item.quantity,
+    }
+  })
+
+  writeInventoryToStorage(inventoryItems.value)
+}
+
+function deleteInventoryItem(itemId: string): void {
+  inventoryItems.value = inventoryItems.value.filter((item) => item.id !== itemId)
+  writeInventoryToStorage(inventoryItems.value)
+}
+
 function toggleInventoryFavorite(itemId: string): void {
   inventoryItems.value = inventoryItems.value.map((item) => {
     if (item.id !== itemId) {
@@ -105,6 +144,8 @@ export function useInventory() {
   return {
     inventoryItems,
     addInventoryItem,
+    updateInventoryItem,
+    deleteInventoryItem,
     toggleInventoryFavorite,
     resetInventory,
   }

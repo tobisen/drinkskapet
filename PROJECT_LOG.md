@@ -358,3 +358,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add richer category/subcategory display labels in detail view.
+
+## 2026-05-04 (Inventory item edit and delete)
+
+### Changed
+- Added `updateInventoryItem` and `deleteInventoryItem` in `src/features/inventory/useInventory.ts` with localStorage persistence.
+- Updated `src/views/InventoryItemDetailView.vue` with minimal edit mode for name, category, brand, and quantity.
+- Added validation for required name and category in edit mode.
+- Added trim handling for name and brand before save.
+- Added delete button with simple confirmation and redirect back to Inventory after delete.
+- Kept favorite toggle and related drinks section in detail view.
+
+### Why
+- Enables practical inventory maintenance directly from item detail pages.
+- Keeps editing/deleting logic in shared composable while preserving client-side simplicity.
+
+### Next
+- Add optional duplicate check in detail edit mode similar to add-form behavior.

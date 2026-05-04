@@ -49,8 +49,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Shared inventory state (local composable):
   - Initializes from localStorage when valid data exists
   - Falls back to `demoInventory` when storage is empty or invalid
-  - Persists changes when items are added or favorites are toggled
-  - Exposes `inventoryItems`, `addInventoryItem`, `toggleInventoryFavorite`, and `resetInventory`
+  - Persists changes when items are added, updated, deleted, or favorites are toggled
+  - Exposes `inventoryItems`, `addInventoryItem`, `updateInventoryItem`, `deleteInventoryItem`, `toggleInventoryFavorite`, and `resetInventory`
   - Reused across Dashboard, Inventory, Drinks, Favorites, Discover and Shopping Suggestions views
 - Inventory view (shared in-memory state):
   - Shows shared inventory items
@@ -64,6 +64,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Inventory item detail view:
   - Route: `/inventory/:id`
   - Loads item from shared inventory state by route id
+  - Supports edit mode (name, category, brand, quantity) and delete with confirm
   - Shows item details and favorite toggle
   - Shows related drinks based on ingredient matching
   - Includes back link to Inventory and clear not-found state
