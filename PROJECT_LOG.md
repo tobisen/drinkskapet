@@ -116,3 +116,23 @@ This file tracks meaningful project decisions and implementation steps.
 ### Next
 - Connect inventory state to dashboard and drink recommendations.
 - Add remove/edit actions for inventory items.
+
+## 2026-05-04 (First usable drinks view)
+
+### Changed
+- Updated `src/views/DrinksView.vue` to use `seedDrinks`, hardcoded demo inventory, and recommendation service output.
+- Added grouped sections for:
+  - can make now
+  - missing one ingredient
+  - missing multiple ingredients
+- Added drink cards showing name, description, full ingredient list, and missing ingredients when relevant.
+- Added local favorite toggle for drinks.
+- Added in-page language selection with Swedish as default and English as second option.
+
+### Why
+- Delivers the first practical drink recommendation view using current deterministic rules.
+- Makes recommendation results and gaps clearly visible for users and future UI integration work.
+
+### Next
+- Connect drinks recommendations to shared inventory state.
+- Add simple filtering by tags and favorites.
