@@ -114,6 +114,9 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 - Shopping Suggestions view updates:
   - Shows current shopping list below recommendations
   - Supports check/uncheck, remove item, and clear checked items
+  - Lets users add next-purchase suggestions directly to the shopping list
+  - Shows clear feedback for added/already-existing suggestion items
+  - Shows "already on shopping list" state when applicable
 
 ## Planned MVP features
 

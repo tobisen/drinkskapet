@@ -451,3 +451,18 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional quantity or notes per shopping list item.
+
+## 2026-05-04 (Connect suggestions to shopping list)
+
+### Changed
+- Updated `src/views/ShoppingSuggestionsView.vue` to add an "Add to shopping list" action on each next-purchase suggestion.
+- Connected suggestion adds to `useShoppingList.addShoppingListItem`.
+- Added UI state for already-present suggestions and per-suggestion feedback for added/already-exists outcomes.
+- Kept existing shopping list controls (check/uncheck, remove, clear checked) unchanged.
+
+### Why
+- Makes recommendation output directly actionable in the same view.
+- Reuses existing duplicate protection in shared shopping list logic.
+
+### Next
+- Optionally prefill category for suggestion items where mapping is confident.

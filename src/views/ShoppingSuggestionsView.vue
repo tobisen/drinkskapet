@@ -21,6 +21,10 @@ const text = {
     remove: 'Ta bort',
     clearChecked: 'Rensa markerade',
     category: 'Kategori',
+    addToShoppingList: 'Lägg till i inköpslista',
+    addedToShoppingList: 'Tillagd i inköpslistan.',
+    alreadyInShoppingList: 'Finns redan i inköpslistan.',
+    alreadyAddedState: 'Redan i inköpslistan',
   },
   en: {
     title: 'Shopping Suggestions',
@@ -34,6 +38,10 @@ const text = {
     remove: 'Remove',
     clearChecked: 'Clear checked',
     category: 'Category',
+    addToShoppingList: 'Add to shopping list',
+    addedToShoppingList: 'Added to shopping list.',
+    alreadyInShoppingList: 'Already in shopping list.',
+    alreadyAddedState: 'Already on shopping list',
   },
 } as const
 
@@ -45,6 +53,7 @@ export default defineComponent({
     return {
       inventoryStore: useInventory(),
       shoppingListStore: useShoppingList(),
+      suggestionFeedback: {} as Record<string, 'added' | 'exists'>,
     }
   },
   inject: ['appLanguage'],
@@ -69,10 +78,43 @@ export default defineComponent({
     },
   },
   methods: {
+    normalize(value: string): string {
+      return value.trim().toLowerCase()
+    },
     getRelatedDrinkNames(drinkIds: string[]): string[] {
       return drinkIds
         .map((id) => seedDrinks.find((drink) => drink.id === id)?.name)
         .filter((name): name is string => Boolean(name))
+    },
+    isSuggestionInShoppingList(ingredientName: string): boolean {
+      const normalizedName = this.normalize(ingredientName)
+
+      return this.shoppingListItems.some(
+        (item) => this.normalize(item.name) === normalizedName,
+      )
+    },
+    addSuggestionToShoppingList(ingredientName: string) {
+      const added = this.shoppingListStore.addShoppingListItem({
+        name: ingredientName,
+      })
+
+      this.suggestionFeedback = {
+        ...this.suggestionFeedback,
+        [ingredientName]: added ? 'added' : 'exists',
+      }
+    },
+    getSuggestionFeedback(ingredientName: string): string {
+      const status = this.suggestionFeedback[ingredientName]
+
+      if (status === 'added') {
+        return this.t.addedToShoppingList
+      }
+
+      if (status === 'exists') {
+        return this.t.alreadyInShoppingList
+      }
+
+      return ''
     },
     toggleShoppingListItem(itemId: string) {
       this.shoppingListStore.toggleShoppingListItem(itemId)
@@ -99,6 +141,17 @@ export default defineComponent({
         <p>
           {{ t.relatedDrinks }}:
           {{ getRelatedDrinkNames(suggestion.unlocksDrinkIds).join(', ') || '-' }}
+        </p>
+        <button
+          v-if="!isSuggestionInShoppingList(suggestion.ingredientName)"
+          type="button"
+          @click="addSuggestionToShoppingList(suggestion.ingredientName)"
+        >
+          {{ t.addToShoppingList }}
+        </button>
+        <p v-else class="feedback-message">{{ t.alreadyAddedState }}</p>
+        <p v-if="getSuggestionFeedback(suggestion.ingredientName)" class="feedback-message">
+          {{ getSuggestionFeedback(suggestion.ingredientName) }}
         </p>
       </li>
     </ul>
@@ -188,5 +241,10 @@ export default defineComponent({
 .checked {
   text-decoration: line-through;
   opacity: 0.75;
+}
+
+.feedback-message {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
 }
 </style>
