@@ -516,3 +516,17 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add edge-case tests for synonym matching and duplicate ingredient term grouping.
+
+## 2026-05-04 (Basic PWA installability)
+
+### Changed
+- Added minimal PWA setup in `vite.config.ts` using `vite-plugin-pwa`.
+- Added a web app manifest configuration with app name, short name, theme/background color, display mode, start URL, and placeholder SVG icons.
+- Enabled automatic service worker registration/update for installability support.
+
+### Why
+- Makes the app installable on supported platforms with minimal setup.
+- Keeps scope small by avoiding advanced offline logic.
+
+### Next
+- Replace placeholder manifest icons with dedicated 192x192 and 512x512 PNG icons for broader install compatibility.

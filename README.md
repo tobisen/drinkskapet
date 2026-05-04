@@ -21,6 +21,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
 
 - Vue 3 + Vite + TypeScript setup
 - Vue Router with base routes
+- Basic PWA installability setup via Vite PWA plugin
 - Base app shell with responsive header/navigation
 - Initial views:
   - Dashboard
@@ -245,7 +246,9 @@ Expected Vercel settings:
 ## Notes
 
 - No authentication is implemented yet.
-- No backend, database, external services or PWA setup is included yet.
+- No backend, database or external services are included yet.
+- Basic PWA setup is enabled for installability (manifest + service worker via Vite plugin).
+- No advanced offline strategy is implemented yet.
 - Recommendation logic is deterministic and framework-independent.
 - Recommendation domain logic has basic unit tests for classification and next-purchase suggestions.
 - Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts` with a few favorite items marked.
