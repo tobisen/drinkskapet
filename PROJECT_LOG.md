@@ -261,3 +261,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional helper to clear drink favorites for demo reset flows.
+
+## 2026-05-04 (Demo reset controls)
+
+### Changed
+- Added `resetInventory` in `src/features/inventory/useInventory.ts` to restore `demoInventory` and persist it to localStorage.
+- Added `resetDrinkFavorites` in `src/features/drinks/useDrinkFavorites.ts` to restore seed favorite ids and persist to localStorage.
+- Added a reset button in `src/views/InventoryView.vue` for restoring demo inventory.
+- Added a reset button in `src/views/FavoritesView.vue` for restoring drink favorites.
+- Added clear button labels and accessible `aria-label` text for both reset controls.
+
+### Why
+- Makes demo sessions easy to reset without manual localStorage cleanup.
+- Keeps reset behavior centralized in existing composables.
+
+### Next
+- Add optional combined "reset all demo data" action in a future settings view.

@@ -18,6 +18,8 @@ const text = {
     category: 'Kategori',
     brand: 'Varumärke (valfritt)',
     addItem: 'Lägg till',
+    resetInventory: 'Återställ demo-inventering',
+    resetInventoryAria: 'Återställ inventeringen till demo-data',
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
   },
@@ -28,6 +30,8 @@ const text = {
     category: 'Category',
     brand: 'Brand (optional)',
     addItem: 'Add Item',
+    resetInventory: 'Reset Demo Inventory',
+    resetInventoryAria: 'Reset inventory to demo data',
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
   },
@@ -72,6 +76,9 @@ export default defineComponent({
       this.form.brand = ''
       this.form.category = 'spirits'
     },
+    resetInventory() {
+      this.inventoryStore.resetInventory()
+    },
     toggleFavorite(itemId: string) {
       this.inventoryStore.toggleInventoryFavorite(itemId)
     },
@@ -105,6 +112,14 @@ export default defineComponent({
       <input id="item-brand" v-model="form.brand" type="text" />
 
       <button type="submit">{{ t.addItem }}</button>
+      <button
+        type="button"
+        class="secondary-button"
+        :aria-label="t.resetInventoryAria"
+        @click="resetInventory"
+      >
+        {{ t.resetInventory }}
+      </button>
     </form>
 
     <ul class="inventory-list">
@@ -145,7 +160,8 @@ export default defineComponent({
 
 .inventory-form input,
 .inventory-form select,
-.inventory-form button {
+.inventory-form button,
+.secondary-button {
   font: inherit;
   padding: 0.55rem;
   border: 1px solid #cdd8d2;
@@ -156,6 +172,11 @@ export default defineComponent({
   background: #1e7a4e;
   color: #fff;
   border-color: #1e7a4e;
+}
+
+.secondary-button {
+  background: #fff;
+  color: #1f2a24;
 }
 
 .inventory-list {

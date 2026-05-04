@@ -51,10 +51,16 @@ function toggleDrinkFavorite(drinkId: string): void {
   writeFavoriteDrinkIds(favoriteDrinkIds.value)
 }
 
+function resetDrinkFavorites(): void {
+  favoriteDrinkIds.value = getSeedFavoriteIds()
+  writeFavoriteDrinkIds(favoriteDrinkIds.value)
+}
+
 export function useDrinkFavorites() {
   return {
     favoriteDrinkIds,
     isDrinkFavorite,
     toggleDrinkFavorite,
+    resetDrinkFavorites,
   }
 }

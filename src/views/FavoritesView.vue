@@ -10,6 +10,8 @@ const text = {
     intro: 'Översikt av favoriter från demo-data.',
     inventoryTitle: 'Favoritprodukter',
     drinksTitle: 'Favoritdrinkar',
+    resetDrinkFavorites: 'Återställ drinkfavoriter',
+    resetDrinkFavoritesAria: 'Återställ favoritdrinkar till standardvärden',
     noInventoryFavorites: 'Inga favoritprodukter ännu.',
     noDrinkFavorites: 'Inga favoritdrinkar ännu.',
   },
@@ -18,6 +20,8 @@ const text = {
     intro: 'Summary of favorites from demo data.',
     inventoryTitle: 'Favorite Inventory Items',
     drinksTitle: 'Favorite Drinks',
+    resetDrinkFavorites: 'Reset Drink Favorites',
+    resetDrinkFavoritesAria: 'Reset favorite drinks to default values',
     noInventoryFavorites: 'No favorite inventory items yet.',
     noDrinkFavorites: 'No favorite drinks yet.',
   },
@@ -51,6 +55,11 @@ export default defineComponent({
       return seedDrinks.filter((drink) => this.drinkFavoritesStore.isDrinkFavorite(drink.id))
     },
   },
+  methods: {
+    resetDrinkFavorites() {
+      this.drinkFavoritesStore.resetDrinkFavorites()
+    },
+  },
 })
 </script>
 
@@ -58,6 +67,14 @@ export default defineComponent({
   <section class="view favorites-view">
     <h2>{{ t.title }}</h2>
     <p class="intro">{{ t.intro }}</p>
+    <button
+      type="button"
+      class="secondary-button"
+      :aria-label="t.resetDrinkFavoritesAria"
+      @click="resetDrinkFavorites"
+    >
+      {{ t.resetDrinkFavorites }}
+    </button>
 
     <section class="group">
       <h3>{{ t.inventoryTitle }} ({{ favoriteInventoryItems.length }})</h3>
@@ -91,6 +108,15 @@ export default defineComponent({
 
 .intro {
   margin: 0;
+}
+
+.secondary-button {
+  font: inherit;
+  padding: 0.55rem;
+  border: 1px solid #cdd8d2;
+  border-radius: 0.4rem;
+  background: #fff;
+  color: #1f2a24;
 }
 
 .group {

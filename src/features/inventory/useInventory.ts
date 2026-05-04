@@ -96,10 +96,16 @@ function toggleInventoryFavorite(itemId: string): void {
   writeInventoryToStorage(inventoryItems.value)
 }
 
+function resetInventory(): void {
+  inventoryItems.value = cloneDemoInventory()
+  writeInventoryToStorage(inventoryItems.value)
+}
+
 export function useInventory() {
   return {
     inventoryItems,
     addInventoryItem,
     toggleInventoryFavorite,
+    resetInventory,
   }
 }
