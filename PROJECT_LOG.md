@@ -198,3 +198,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Connect shopping suggestions to real user inventory when persistence is introduced.
+
+## 2026-05-04 (Improved seed and demo content quality)
+
+### Changed
+- Expanded `src/data/seedDrinks.ts` to 15 simple classic drinks.
+- Added a broader mix across gin, rum, whiskey/bourbon, vodka, and low-effort highballs.
+- Included one non-alcoholic option (`Virgin Mojito`) within current drink types.
+- Improved ingredient `matchingTerms` coverage for more practical matching.
+- Updated `src/data/demoInventory.ts` with a more realistic Swedish home bar baseline.
+- Marked several demo inventory items as favorites.
+
+### Why
+- Increases recommendation usefulness with better breadth and match quality.
+- Makes demo behavior more representative for Swedish home bar usage.
+
+### Next
+- Add lightweight unit tests for ingredient matching stability across synonyms.

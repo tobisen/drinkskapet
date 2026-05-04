@@ -34,7 +34,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Drink recipes and drink ingredients
 - Seed data:
   - Inventory categories
-  - 9 classic drinks with ingredient `matchingTerms`
+  - 15 classic and simple drinks with ingredient `matchingTerms`, including one non-alcoholic option
 - Recommendation service:
   - Matches inventory items against ingredient `matchingTerms`
   - Classifies drinks into `canMakeNow`, `missingOneIngredient`, `missingMultipleIngredients`
@@ -181,7 +181,7 @@ Expected Vercel settings:
 - No authentication is implemented yet.
 - No backend, database, external services or PWA setup is included yet.
 - Recommendation logic is deterministic and framework-independent.
-- Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts`.
+- Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts` with a few favorite items marked.
 - Dashboard summary currently uses demo inventory data only.
 - Inventory data is currently local view state only (no persistence).
 - Drinks view data is currently local view state only (no persistence).
