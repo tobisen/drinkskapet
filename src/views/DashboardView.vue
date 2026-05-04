@@ -102,10 +102,10 @@ export default defineComponent({
 }
 
 .summary-card {
-  border: 1px solid #d7e0db;
+  border: 1px solid rgba(222, 237, 245, 0.24);
   border-radius: 0.5rem;
   padding: 0.75rem;
-  background: #fff;
+  background: rgba(8, 10, 13, 0.55);
 }
 
 .summary-card h3 {
