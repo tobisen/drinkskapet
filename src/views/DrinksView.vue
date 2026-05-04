@@ -18,6 +18,8 @@ const text = {
     title: 'Drinkförslag',
     intro: 'Översikt baserad på demo-inventory och seed drinks.',
     language: 'Språk',
+    languageSwedish: 'Svenska',
+    languageEnglish: 'Engelska',
     canMakeNow: 'Kan göra nu',
     missingOne: 'Saknar en ingrediens',
     missingMultiple: 'Saknar flera ingredienser',
@@ -25,11 +27,14 @@ const text = {
     missingIngredients: 'Saknade ingredienser',
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
+    noDrinks: 'Inga drinkar i den här gruppen ännu.',
   },
   en: {
     title: 'Drink Suggestions',
     intro: 'Summary based on demo inventory and seed drinks.',
     language: 'Language',
+    languageSwedish: 'Swedish',
+    languageEnglish: 'English',
     canMakeNow: 'Can Make Now',
     missingOne: 'Missing One Ingredient',
     missingMultiple: 'Missing Multiple Ingredients',
@@ -37,6 +42,7 @@ const text = {
     missingIngredients: 'Missing ingredients',
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
+    noDrinks: 'No drinks in this group yet.',
   },
 } as const
 
@@ -82,8 +88,8 @@ export default defineComponent({
       <label>
         {{ t.language }}
         <select v-model="selectedLanguage">
-          <option value="sv">Svenska</option>
-          <option value="en">English</option>
+          <option value="sv">{{ t.languageSwedish }}</option>
+          <option value="en">{{ t.languageEnglish }}</option>
         </select>
       </label>
     </div>
@@ -92,6 +98,7 @@ export default defineComponent({
 
     <section class="group">
       <h3>{{ t.canMakeNow }} ({{ recommendations.canMakeNow.length }})</h3>
+      <p v-if="recommendations.canMakeNow.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.canMakeNow" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
           <strong>{{ entry.drink.name }}</strong>
@@ -106,6 +113,7 @@ export default defineComponent({
 
     <section class="group">
       <h3>{{ t.missingOne }} ({{ recommendations.missingOneIngredient.length }})</h3>
+      <p v-if="recommendations.missingOneIngredient.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.missingOneIngredient" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
           <strong>{{ entry.drink.name }}</strong>
@@ -121,6 +129,7 @@ export default defineComponent({
 
     <section class="group">
       <h3>{{ t.missingMultiple }} ({{ recommendations.missingMultipleIngredients.length }})</h3>
+      <p v-if="recommendations.missingMultipleIngredients.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.missingMultipleIngredients" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
           <strong>{{ entry.drink.name }}</strong>
