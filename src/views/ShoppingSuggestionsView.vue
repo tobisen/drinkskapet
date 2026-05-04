@@ -25,6 +25,7 @@ const text = {
     addedToShoppingList: 'Tillagd i inköpslistan.',
     alreadyInShoppingList: 'Finns redan i inköpslistan.',
     alreadyAddedState: 'Redan i inköpslistan',
+    clearCheckedAria: 'Rensa markerade inköpslistorader',
   },
   en: {
     title: 'Shopping Suggestions',
@@ -42,6 +43,7 @@ const text = {
     addedToShoppingList: 'Added to shopping list.',
     alreadyInShoppingList: 'Already in shopping list.',
     alreadyAddedState: 'Already on shopping list',
+    clearCheckedAria: 'Clear checked shopping list rows',
   },
 } as const
 
@@ -75,6 +77,9 @@ export default defineComponent({
     },
     shoppingListItems() {
       return this.shoppingListStore.shoppingListItems
+    },
+    hasCheckedShoppingListItems(): boolean {
+      return this.shoppingListItems.some((item) => item.isChecked)
     },
   },
   methods: {
@@ -149,8 +154,12 @@ export default defineComponent({
         >
           {{ t.addToShoppingList }}
         </button>
-        <p v-else class="feedback-message">{{ t.alreadyAddedState }}</p>
-        <p v-if="getSuggestionFeedback(suggestion.ingredientName)" class="feedback-message">
+        <p v-else class="feedback-message" aria-live="polite">{{ t.alreadyAddedState }}</p>
+        <p
+          v-if="getSuggestionFeedback(suggestion.ingredientName)"
+          class="feedback-message"
+          aria-live="polite"
+        >
           {{ getSuggestionFeedback(suggestion.ingredientName) }}
         </p>
       </li>
@@ -161,7 +170,12 @@ export default defineComponent({
     <section class="shopping-list-section">
       <div class="shopping-list-header">
         <h3>{{ t.shoppingListTitle }}</h3>
-        <button type="button" @click="clearCheckedShoppingListItems">
+        <button
+          type="button"
+          :aria-label="t.clearCheckedAria"
+          :disabled="!hasCheckedShoppingListItems"
+          @click="clearCheckedShoppingListItems"
+        >
           {{ t.clearChecked }}
         </button>
       </div>

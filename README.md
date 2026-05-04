@@ -243,5 +243,6 @@ Expected Vercel settings:
 - Recommendation logic is deterministic and framework-independent.
 - Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts` with a few favorite items marked.
 - Dashboard summary currently uses demo inventory data only.
-- Inventory data is currently shared in-memory state only (no persistence).
+- Inventory data is persisted in localStorage via shared inventory composable.
 - Drink favorites are persisted in localStorage via shared drink favorites composable.
+- Shopping list items are persisted in localStorage via shared shopping list composable.

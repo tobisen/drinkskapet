@@ -14,6 +14,7 @@ const text = {
     missingOne: 'Saknar en ingrediens',
     nextPurchases: 'Topp nästa köp',
     unlocks: 'låser upp',
+    noItems: 'Inget att visa ännu.',
   },
   en: {
     title: 'Dashboard',
@@ -22,6 +23,7 @@ const text = {
     missingOne: 'Missing One Ingredient',
     nextPurchases: 'Top Next Purchases',
     unlocks: 'unlocks',
+    noItems: 'Nothing to show yet.',
   },
 } as const
 
@@ -63,29 +65,32 @@ export default defineComponent({
     <div class="summary-grid">
       <article class="summary-card">
         <h3>{{ t.canMakeNow }} ({{ recommendations.canMakeNow.length }})</h3>
-        <ul>
+        <ul v-if="recommendations.canMakeNow.length > 0">
           <li v-for="entry in recommendations.canMakeNow.slice(0, 4)" :key="entry.drink.id">
             {{ entry.drink.name }}
           </li>
         </ul>
+        <p v-else>{{ t.noItems }}</p>
       </article>
 
       <article class="summary-card">
         <h3>{{ t.missingOne }} ({{ recommendations.missingOneIngredient.length }})</h3>
-        <ul>
+        <ul v-if="recommendations.missingOneIngredient.length > 0">
           <li v-for="entry in recommendations.missingOneIngredient.slice(0, 4)" :key="entry.drink.id">
             {{ entry.drink.name }}: {{ entry.missingIngredients[0].name }}
           </li>
         </ul>
+        <p v-else>{{ t.noItems }}</p>
       </article>
 
       <article class="summary-card">
         <h3>{{ t.nextPurchases }}</h3>
-        <ul>
+        <ul v-if="topPurchases.length > 0">
           <li v-for="purchase in topPurchases" :key="purchase.ingredientName">
             {{ purchase.ingredientName }} ({{ t.unlocks }} {{ purchase.unlocksDrinkCount }})
           </li>
         </ul>
+        <p v-else>{{ t.noItems }}</p>
       </article>
     </div>
   </section>

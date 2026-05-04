@@ -32,7 +32,13 @@ function isValidShoppingListItem(value: unknown): value is ShoppingListItem {
 }
 
 function loadShoppingListItems(): ShoppingListItem[] {
-  const rawValue = localStorage.getItem(SHOPPING_LIST_STORAGE_KEY)
+  let rawValue: string | null = null
+
+  try {
+    rawValue = localStorage.getItem(SHOPPING_LIST_STORAGE_KEY)
+  } catch {
+    return []
+  }
 
   if (!rawValue) {
     return []
@@ -46,14 +52,17 @@ function loadShoppingListItems(): ShoppingListItem[] {
     }
 
     return parsed.filter(isValidShoppingListItem)
-  } catch (error) {
-    console.warn('Failed to parse shopping list data from localStorage.', error)
+  } catch {
     return []
   }
 }
 
 function saveShoppingListItems(items: ShoppingListItem[]): void {
-  localStorage.setItem(SHOPPING_LIST_STORAGE_KEY, JSON.stringify(items))
+  try {
+    localStorage.setItem(SHOPPING_LIST_STORAGE_KEY, JSON.stringify(items))
+  } catch {
+    // Ignore storage write errors for now.
+  }
 }
 
 function addShoppingListItem(input: {

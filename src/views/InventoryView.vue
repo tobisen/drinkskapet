@@ -283,7 +283,7 @@ export default defineComponent({
         {{ t.resetInventory }}
       </button>
 
-      <p v-if="validationMessage" class="validation-message">{{ validationMessage }}</p>
+      <p v-if="validationMessage" class="validation-message" role="alert">{{ validationMessage }}</p>
     </form>
 
     <section class="filters-panel" :aria-label="t.filtersTitle">

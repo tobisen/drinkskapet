@@ -481,3 +481,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Define the import parsing contract and validation rules before implementing actual fetch/parse flows.
+
+## 2026-05-04 (MVP stabilization pass)
+
+### Changed
+- Improved shopping list localStorage safety in `useShoppingList` with safe read/write guards.
+- Added clearer dashboard empty states when lists are empty.
+- Added lightweight accessibility improvements for inline feedback and validation messages (`role="alert"` / `aria-live`).
+- Removed duplicated style block structure in `DrinkDetailView` by keeping a single scoped style section.
+- Updated README notes to match current localStorage persistence behavior.
+
+### Why
+- Reduces small runtime risks and improves clarity without adding new features.
+- Keeps MVP behavior stable and easier to maintain before expanding scope.
+
+### Next
+- Add focused unit tests for recommendation and suggestion domain logic.

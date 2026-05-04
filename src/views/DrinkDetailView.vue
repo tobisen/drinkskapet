@@ -283,10 +283,10 @@ export default defineComponent({
               </button>
             </div>
             <div class="feedback-group">
-              <span v-if="getIngredientFeedback(missing.name)" class="feedback-message">
+              <span v-if="getIngredientFeedback(missing.name)" class="feedback-message" aria-live="polite">
                 {{ getIngredientFeedback(missing.name) }}
               </span>
-              <span v-if="getShoppingFeedback(missing.name)" class="feedback-message">
+              <span v-if="getShoppingFeedback(missing.name)" class="feedback-message" aria-live="polite">
                 {{ getShoppingFeedback(missing.name) }}
               </span>
             </div>
@@ -307,19 +307,6 @@ export default defineComponent({
     </article>
   </section>
 </template>
-
-<style scoped>
-.missing-actions {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.feedback-group {
-  display: grid;
-  gap: 0.2rem;
-}
-</style>
 
 <style scoped>
 .detail-view {
@@ -383,5 +370,16 @@ export default defineComponent({
   margin-left: 0.5rem;
   font-size: 0.88rem;
   color: #5a6a60;
+}
+
+.missing-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.feedback-group {
+  display: grid;
+  gap: 0.2rem;
 }
 </style>

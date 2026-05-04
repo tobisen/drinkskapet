@@ -326,7 +326,7 @@ export default defineComponent({
         <label for="edit-quantity">{{ t.quantity }}</label>
         <input id="edit-quantity" v-model.number="editForm.quantity" type="number" min="0" step="1" />
 
-        <p v-if="validationMessage" class="validation-message">{{ validationMessage }}</p>
+        <p v-if="validationMessage" class="validation-message" role="alert">{{ validationMessage }}</p>
       </form>
 
       <template v-else>
