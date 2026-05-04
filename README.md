@@ -44,8 +44,10 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows count/list for drinks that can be made now
   - Shows drinks missing one ingredient
   - Shows top suggested next purchases
-- Shared inventory state (in-memory composable):
-  - Initialized from `demoInventory`
+- Shared inventory state (local composable):
+  - Initializes from localStorage when valid data exists
+  - Falls back to `demoInventory` when storage is empty or invalid
+  - Persists changes when items are added or favorites are toggled
   - Exposes `inventoryItems`, `addInventoryItem`, and `toggleInventoryFavorite`
   - Reused across Dashboard, Inventory, Drinks, Favorites, Discover and Shopping Suggestions views
 - Inventory view (shared in-memory state):

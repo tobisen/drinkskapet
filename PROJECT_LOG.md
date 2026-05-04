@@ -229,3 +229,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional reset helper for demo sessions and upcoming tests.
+
+## 2026-05-04 (Inventory localStorage persistence)
+
+### Changed
+- Updated `src/features/inventory/useInventory.ts` to persist shared inventory state to localStorage.
+- Added storage key constant: `INVENTORY_STORAGE_KEY`.
+- Added safe initialization from localStorage with validation and JSON parse error handling.
+- Added fallback to `demoInventory` when localStorage is empty or invalid.
+- Added storage writes when items are added or favorites are toggled.
+
+### Why
+- Preserves user inventory changes between page reloads without backend or auth.
+- Keeps persistence logic centralized in the existing inventory composable.
+
+### Next
+- Add optional clear/reset inventory action for local testing.

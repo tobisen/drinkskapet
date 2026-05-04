@@ -8,7 +8,57 @@ interface AddInventoryItemInput {
   brand?: string
 }
 
-const inventoryItems = ref<InventoryItem[]>(demoInventory.map((item) => ({ ...item })))
+const INVENTORY_STORAGE_KEY = 'drinkskapet.inventory.v1'
+
+function cloneDemoInventory(): InventoryItem[] {
+  return demoInventory.map((item) => ({ ...item }))
+}
+
+function isValidInventoryItem(value: unknown): value is InventoryItem {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const item = value as Partial<InventoryItem>
+
+  return (
+    typeof item.id === 'string' &&
+    typeof item.name === 'string' &&
+    typeof item.category === 'string' &&
+    typeof item.quantity === 'number' &&
+    typeof item.isFavorite === 'boolean'
+  )
+}
+
+function readInventoryFromStorage(): InventoryItem[] {
+  try {
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY)
+
+    if (!raw) {
+      return cloneDemoInventory()
+    }
+
+    const parsed: unknown = JSON.parse(raw)
+
+    if (!Array.isArray(parsed) || !parsed.every(isValidInventoryItem)) {
+      return cloneDemoInventory()
+    }
+
+    return parsed
+  } catch {
+    return cloneDemoInventory()
+  }
+}
+
+function writeInventoryToStorage(items: InventoryItem[]): void {
+  try {
+    localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(items))
+  } catch {
+    // Ignore storage write errors for now.
+  }
+}
+
+const inventoryItems = ref<InventoryItem[]>(readInventoryFromStorage())
 
 function addInventoryItem(input: AddInventoryItemInput): void {
   const name = input.name.trim()
@@ -27,6 +77,8 @@ function addInventoryItem(input: AddInventoryItemInput): void {
     quantity: 1,
     isFavorite: false,
   })
+
+  writeInventoryToStorage(inventoryItems.value)
 }
 
 function toggleInventoryFavorite(itemId: string): void {
@@ -40,6 +92,8 @@ function toggleInventoryFavorite(itemId: string): void {
       isFavorite: !item.isFavorite,
     }
   })
+
+  writeInventoryToStorage(inventoryItems.value)
 }
 
 export function useInventory() {
