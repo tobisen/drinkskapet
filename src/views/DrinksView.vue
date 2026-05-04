@@ -188,7 +188,9 @@ export default defineComponent({
     <section v-if="filteredDrinks.length > 0" class="group">
       <article v-for="item in filteredDrinks" :key="item.entry.drink.id" class="drink-card">
         <div class="title-row">
-          <strong>{{ item.entry.drink.name }}</strong>
+          <RouterLink class="drink-link" :to="`/drinks/${item.entry.drink.id}`">
+            {{ item.entry.drink.name }}
+          </RouterLink>
           <button type="button" @click="toggleFavorite(item.entry.drink.id)">
             {{ isFavorite(item.entry.drink.id) ? t.unfavorite : t.favorite }}
           </button>
@@ -286,5 +288,11 @@ export default defineComponent({
   background: #fff;
   border-radius: 0.35rem;
   padding: 0.35rem 0.55rem;
+}
+
+.drink-link {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
 }
 </style>

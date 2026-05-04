@@ -26,6 +26,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Dashboard
   - My Bar / Inventory
   - Drink Suggestions
+  - Drink Detail
   - Favorites
   - Discover
   - Shopping Suggestions
@@ -69,7 +70,14 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Adds local filters (search, status, favorites-only)
   - Shows filtered results count and clear empty state
   - Shows name, description, ingredients, and missing ingredients
+  - Links each drink to a detail page
   - Supports toggling shared drink favorite state
+- Drink detail view:
+  - Route: `/drinks/:id`
+  - Loads drink from seed data by route id
+  - Shows make-now status and missing ingredients via recommendation service
+  - Shows name, description, ingredients, method, glass, tags, and favorite toggle
+  - Includes back link to Drinks and clear not-found state
 - Favorites view (read-only):
   - Uses `demoInventory` and `seedDrinks`
   - Shows favorite inventory items
@@ -173,6 +181,7 @@ src/
 - `/` -> Dashboard
 - `/inventory` -> My Bar / Inventory
 - `/drinks` -> Drink Suggestions
+- `/drinks/:id` -> Drink Detail
 - `/favorites` -> Favorites
 - `/discover` -> Discover
 - `/shopping-suggestions` -> Shopping Suggestions

@@ -323,3 +323,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Consider adding quick filter reset and sort by name/status.
+
+## 2026-05-04 (Drink detail view)
+
+### Changed
+- Added `src/views/DrinkDetailView.vue` with route-based detail rendering from `seedDrinks`.
+- Added route `/drinks/:id` in `src/router/index.ts`.
+- Updated `src/views/DrinksView.vue` so each drink links to its detail page.
+- Added detail content for name, description, ingredients with amounts, method steps, glass, tags, status, and missing ingredients.
+- Added favorite toggle in detail view via `useDrinkFavorites` and back link to Drinks.
+- Added clear not-found state for invalid drink ids.
+
+### Why
+- Provides a focused view for each drink and clearer decision support from inventory match status.
+- Keeps implementation fully client-side with existing seed data and recommendation logic.
+
+### Next
+- Add localized drink text in detail view and deep-link sharing improvements.
