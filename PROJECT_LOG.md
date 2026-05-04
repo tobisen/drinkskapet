@@ -82,3 +82,21 @@ This file tracks meaningful project decisions and implementation steps.
 ### Next
 - Add tests for recommendation matching and purchase suggestion ranking.
 - Connect recommendation service to the Drink Suggestions view.
+
+## 2026-05-04 (Dashboard recommendation summary)
+
+### Changed
+- Updated `src/views/DashboardView.vue` to use `seedDrinks` and a small hardcoded demo inventory.
+- Added dashboard summary sections for:
+  - drinks that can be made now
+  - drinks missing one ingredient
+  - top next purchases
+- Kept implementation minimal, mobile-first, and without forms or persistence.
+
+### Why
+- Delivers the first visible product feedback loop using current rule-based logic.
+- Validates recommendation service output directly in the app before deeper feature work.
+
+### Next
+- Replace demo inventory with user-managed inventory data.
+- Expand dashboard with missing-multiple and quick action links.

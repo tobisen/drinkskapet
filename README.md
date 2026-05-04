@@ -15,7 +15,7 @@ The app should answer:
 
 ## Current status
 
-Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mobile-first views, initial domain types and seed data, plus a first rule-based recommendation service.
+Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mobile-first views, initial domain types and seed data, a rule-based recommendation service, and a first dashboard recommendation summary using demo inventory.
 
 ## Implemented features
 
@@ -39,6 +39,10 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Classifies drinks into `canMakeNow`, `missingOneIngredient`, `missingMultipleIngredients`
   - Returns missing ingredients per drink
   - Suggests next purchases by counting which missing ingredients unlock most drinks
+- Dashboard summary (seed data only):
+  - Shows count/list for drinks that can be made now
+  - Shows drinks missing one ingredient
+  - Shows top suggested next purchases
 
 ## Planned MVP features
 
@@ -149,3 +153,4 @@ Expected Vercel settings:
 - No authentication is implemented yet.
 - No backend, database, external services or PWA setup is included yet.
 - Recommendation logic is deterministic and framework-independent.
+- Dashboard summary currently uses hardcoded demo inventory.
