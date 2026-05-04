@@ -54,6 +54,8 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows shared inventory items
   - Includes a minimal add-item form (`name`, `category`, optional `brand`)
   - Adds basic inline validation (required name/category, trimmed input, duplicate prevention by name+brand)
+  - Adds local filters (search by name/brand, category, favorites-only)
+  - Shows filtered results count and clear empty state
   - Clears form after successful add
   - Supports toggling `isFavorite` per item
 - Shared drink favorites state (local composable):

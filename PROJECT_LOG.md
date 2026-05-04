@@ -294,3 +294,17 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Consider adding optional quantity input and validation in the same form.
+
+## 2026-05-04 (Inventory filters)
+
+### Changed
+- Updated `src/views/InventoryView.vue` with local filters for search, category, and favorites-only.
+- Added filtered results count and clear empty state when no items match.
+- Kept filters local to InventoryView while continuing to use shared inventory data from `useInventory`.
+
+### Why
+- Makes larger inventories easier to browse and inspect.
+- Improves day-to-day usability without adding backend or state complexity.
+
+### Next
+- Consider adding quick filter reset and sort options.

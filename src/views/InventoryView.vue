@@ -10,6 +10,12 @@ interface InventoryFormState {
   brand: string
 }
 
+interface InventoryFilters {
+  search: string
+  category: InventoryCategory | ''
+  favoritesOnly: boolean
+}
+
 const text = {
   sv: {
     title: 'Min bar / Inventering',
@@ -23,6 +29,14 @@ const text = {
     validationNameRequired: 'Ange ett namn på produkten.',
     validationCategoryRequired: 'Välj en kategori.',
     validationDuplicate: 'Produkten finns redan med samma namn och varumärke.',
+    filtersTitle: 'Filter',
+    searchLabel: 'Sök',
+    searchPlaceholder: 'Sök på namn eller varumärke',
+    filterCategory: 'Filtrera kategori',
+    allCategories: 'Alla kategorier',
+    favoritesOnly: 'Endast favoriter',
+    results: 'Träffar',
+    emptyFiltered: 'Inga produkter matchar dina filter.',
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
   },
@@ -38,6 +52,14 @@ const text = {
     validationNameRequired: 'Please enter an item name.',
     validationCategoryRequired: 'Please select a category.',
     validationDuplicate: 'An item with the same name and brand already exists.',
+    filtersTitle: 'Filters',
+    searchLabel: 'Search',
+    searchPlaceholder: 'Search by name or brand',
+    filterCategory: 'Filter category',
+    allCategories: 'All categories',
+    favoritesOnly: 'Favorites only',
+    results: 'Results',
+    emptyFiltered: 'No items match your filters.',
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
   },
@@ -57,6 +79,11 @@ export default defineComponent({
         category: '',
         brand: '',
       } as InventoryFormState,
+      filters: {
+        search: '',
+        category: '',
+        favoritesOnly: false,
+      } as InventoryFilters,
       validationMessage: '',
     }
   },
@@ -69,6 +96,28 @@ export default defineComponent({
     },
     items() {
       return this.inventoryStore.inventoryItems
+    },
+    filteredItems() {
+      const searchTerm = this.filters.search.trim().toLowerCase()
+
+      return this.items.filter((item) => {
+        if (this.filters.category && item.category !== this.filters.category) {
+          return false
+        }
+
+        if (this.filters.favoritesOnly && !item.isFavorite) {
+          return false
+        }
+
+        if (!searchTerm) {
+          return true
+        }
+
+        const name = item.name.toLowerCase()
+        const brand = (item.brand ?? '').toLowerCase()
+
+        return name.includes(searchTerm) || brand.includes(searchTerm)
+      })
     },
   },
   methods: {
@@ -163,8 +212,33 @@ export default defineComponent({
       <p v-if="validationMessage" class="validation-message">{{ validationMessage }}</p>
     </form>
 
-    <ul class="inventory-list">
-      <li v-for="item in items" :key="item.id" class="inventory-item">
+    <section class="filters-panel" :aria-label="t.filtersTitle">
+      <label for="filter-search">{{ t.searchLabel }}</label>
+      <input
+        id="filter-search"
+        v-model="filters.search"
+        type="text"
+        :placeholder="t.searchPlaceholder"
+      />
+
+      <label for="filter-category">{{ t.filterCategory }}</label>
+      <select id="filter-category" v-model="filters.category">
+        <option value="">{{ t.allCategories }}</option>
+        <option v-for="category in categories" :key="category.id" :value="category.id">
+          {{ category.label }}
+        </option>
+      </select>
+
+      <label class="favorites-toggle">
+        <input v-model="filters.favoritesOnly" type="checkbox" />
+        {{ t.favoritesOnly }}
+      </label>
+
+      <p class="results-count">{{ t.results }}: {{ filteredItems.length }}</p>
+    </section>
+
+    <ul v-if="filteredItems.length > 0" class="inventory-list">
+      <li v-for="item in filteredItems" :key="item.id" class="inventory-item">
         <div>
           <strong>{{ item.name }}</strong>
           <p>
@@ -177,6 +251,8 @@ export default defineComponent({
         </button>
       </li>
     </ul>
+
+    <p v-else class="empty-state">{{ t.emptyFiltered }}</p>
   </section>
 </template>
 
@@ -190,19 +266,24 @@ export default defineComponent({
   margin: 0;
 }
 
-.inventory-form {
+.inventory-form,
+.filters-panel {
   display: grid;
   gap: 0.5rem;
 }
 
-.inventory-form label {
+.inventory-form label,
+.filters-panel label,
+.favorites-toggle {
   font-size: 0.9rem;
 }
 
 .inventory-form input,
 .inventory-form select,
 .inventory-form button,
-.secondary-button {
+.secondary-button,
+.filters-panel input,
+.filters-panel select {
   font: inherit;
   padding: 0.55rem;
   border: 1px solid #cdd8d2;
@@ -218,6 +299,24 @@ export default defineComponent({
 .secondary-button {
   background: #fff;
   color: #1f2a24;
+}
+
+.favorites-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.favorites-toggle input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.results-count,
+.empty-state {
+  margin: 0;
+  color: #5a6a60;
+  font-size: 0.9rem;
 }
 
 .validation-message {
