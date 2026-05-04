@@ -47,3 +47,20 @@ This file tracks meaningful project decisions and implementation steps.
 - Add initial domain types for inventory and drinks.
 - Add seed data.
 - Start building rule-based recommendation logic in a separate service.
+
+## 2026-05-04 (Domain types and seed data)
+
+### Changed
+- Added inventory domain types in `src/features/inventory/types.ts`.
+- Added drink domain types in `src/features/drinks/types.ts`.
+- Added inventory category seed data in `src/data/inventoryCategories.ts`.
+- Added 9 classic seed drinks with ingredient `matchingTerms` in `src/data/seedDrinks.ts`.
+
+### Why
+- Establishes a typed foundation for inventory and drink matching.
+- Provides realistic starter data for upcoming recommendation logic.
+- Keeps matching deterministic and simple with explicit synonym terms.
+
+### Next
+- Implement recommendation service logic (can make now / missing one / missing multiple).
+- Add a simple inventory seed list and connect seed data to views.

@@ -15,7 +15,7 @@ The app should answer:
 
 ## Current status
 
-Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router and base mobile-first views.
+Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mobile-first views, and initial domain types with seed data.
 
 ## Implemented features
 
@@ -28,6 +28,12 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router and base
   - Drink Suggestions
   - Favorites
   - Discover
+- Initial domain model for:
+  - Inventory categories and items
+  - Drink recipes and drink ingredients
+- Seed data:
+  - Inventory categories
+  - 9 classic drinks with ingredient `matchingTerms`
 
 ## Planned MVP features
 
@@ -85,6 +91,14 @@ Current structure:
 src/
   assets/
   components/
+  data/
+    inventoryCategories.ts
+    seedDrinks.ts
+  features/
+    drinks/
+      types.ts
+    inventory/
+      types.ts
   router/
     index.ts
   views/
@@ -126,4 +140,4 @@ Expected Vercel settings:
 
 - No authentication is implemented yet.
 - No backend, database, external services or PWA setup is included yet.
-- Recommendation logic and domain models are not implemented yet.
+- Recommendation service logic is not implemented yet.
