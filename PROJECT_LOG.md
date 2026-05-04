@@ -245,3 +245,19 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional clear/reset inventory action for local testing.
+
+## 2026-05-04 (Shared drink favorites composable)
+
+### Changed
+- Added `src/features/drinks/useDrinkFavorites.ts` for shared favorite drink ids state.
+- Added safe localStorage initialization with parse validation and fallback to seed favorites.
+- Exposed `favoriteDrinkIds`, `isDrinkFavorite`, and `toggleDrinkFavorite`.
+- Updated `DrinksView` to use shared drink favorites state instead of local-only drink favorite toggling.
+- Updated `FavoritesView` to show favorite drinks from shared drink favorites state.
+
+### Why
+- Keeps drink favorite behavior consistent across views with minimal shared state.
+- Preserves favorite drink choices between reloads without backend/auth complexity.
+
+### Next
+- Add optional helper to clear drink favorites for demo reset flows.

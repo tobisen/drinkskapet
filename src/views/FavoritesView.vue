@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useInventory } from '../features/inventory/useInventory'
+import { useDrinkFavorites } from '../features/drinks/useDrinkFavorites'
 import { seedDrinks } from '../data/seedDrinks'
 
 const text = {
@@ -26,12 +27,13 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'FavoritesView',
+  inject: ['appLanguage'],
   data() {
     return {
       inventoryStore: useInventory(),
+      drinkFavoritesStore: useDrinkFavorites(),
     }
   },
-  inject: ['appLanguage'],
   computed: {
     inventoryItems() {
       return this.inventoryStore.inventoryItems
@@ -46,7 +48,7 @@ export default defineComponent({
       return this.inventoryItems.filter((item: { isFavorite: boolean }) => item.isFavorite)
     },
     favoriteDrinks() {
-      return seedDrinks.filter((drink) => drink.isFavorite)
+      return seedDrinks.filter((drink) => this.drinkFavoritesStore.isDrinkFavorite(drink.id))
     },
   },
 })

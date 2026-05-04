@@ -1,8 +1,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useInventory } from '../features/inventory/useInventory'
+import { useDrinkFavorites } from '../features/drinks/useDrinkFavorites'
 import { seedDrinks } from '../data/seedDrinks'
 import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
+
 const text = {
   sv: {
     title: 'Drinkförslag',
@@ -15,47 +17,6 @@ const text = {
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
     noDrinks: 'Inga drinkar i den här gruppen ännu.',
-    drinkNames: {
-      'old-fashioned': 'Old Fashioned',
-      'whiskey-sour': 'Whiskey Sour',
-      'gin-tonic': 'Gin & Tonic',
-    } as Record<string, string>,
-    drinkDescriptions: {
-      margarita: 'En frisk och citrusdriven tequilaklassiker.',
-      daiquiri: 'En enkel rom sour med tydlig limebalans.',
-      'old-fashioned': 'Whiskydriven klassiker med socker och bitters.',
-      negroni: 'Klassisk bitter aperitif i lika delar.',
-      martini: 'En ren och aromatisk klassiker med gin och vermouth.',
-      'whiskey-sour': 'Balanserad sour med whiskey, citrus och sötma.',
-      mojito: 'Fräsch highball med rom, mynta och lime.',
-      'moscow-mule': 'Kryddig och syrlig vodka-highball.',
-      'gin-tonic': 'Enkel longdrink med frisk beska.',
-    } as Record<string, string>,
-    ingredientNames: {
-      Tequila: 'Tequila',
-      'Triple Sec': 'Triple Sec',
-      'Lime Juice': 'Limejuice',
-      Salt: 'Salt',
-      'White Rum': 'Vit rom',
-      'Simple Syrup': 'Sockerlag',
-      Bourbon: 'Bourbon',
-      'Sugar Syrup': 'Sockerlag',
-      'Angostura Bitters': 'Angostura bitters',
-      'Orange Peel': 'Apelsinzest',
-      Gin: 'Gin',
-      Campari: 'Campari',
-      'Sweet Vermouth': 'Söt vermouth',
-      'Dry Vermouth': 'Torr vermouth',
-      'Lemon Twist or Olive': 'Citronzest eller oliv',
-      'Lemon Juice': 'Citronjuice',
-      'Egg White': 'Äggvita',
-      Mint: 'Mynta',
-      'Soda Water': 'Sodavatten',
-      Vodka: 'Vodka',
-      'Ginger Beer': 'Ginger beer',
-      'Tonic Water': 'Tonic water',
-      'Lime Wedge': 'Limeklyfta',
-    } as Record<string, string>,
   },
   en: {
     title: 'Drink Suggestions',
@@ -68,9 +29,6 @@ const text = {
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
     noDrinks: 'No drinks in this group yet.',
-    drinkNames: {},
-    drinkDescriptions: {},
-    ingredientNames: {},
   },
 } as const
 
@@ -78,14 +36,15 @@ type LanguageCode = keyof typeof text
 
 export default defineComponent({
   name: 'DrinksView',
+  inject: ['appLanguage'],
   data() {
     return {
       inventoryStore: useInventory(),
-      drinks: seedDrinks.map((drink) => ({ ...drink })),
+      drinkFavoritesStore: useDrinkFavorites(),
+      drinks: seedDrinks,
     }
   },
-    inject: ['appLanguage'],
-    computed: {
+  computed: {
     inventoryItems() {
       return this.inventoryStore.inventoryItems
     },
@@ -101,39 +60,16 @@ export default defineComponent({
   },
   methods: {
     toggleFavorite(drinkId: string) {
-      this.drinks = this.drinks.map((drink) => {
-        if (drink.id !== drinkId) {
-          return drink
-        }
-
-        return {
-          ...drink,
-          isFavorite: !drink.isFavorite,
-        }
-      })
+      this.drinkFavoritesStore.toggleDrinkFavorite(drinkId)
     },
-    getDrinkName(drink: { id: string; name: string }): string {
-      return (this.t.drinkNames as Record<string, string>)[drink.id] ?? drink.name
+    isFavorite(drinkId: string): boolean {
+      return this.drinkFavoritesStore.isDrinkFavorite(drinkId)
     },
-    getDrinkDescription(drink: { id: string; description: string }): string {
-      return (this.t.drinkDescriptions as Record<string, string>)[drink.id] ?? drink.description
+    formatIngredients(ingredients: Array<{ name: string; amount: string }>): string {
+      return ingredients.map((ingredient) => `${ingredient.name} (${ingredient.amount})`).join(', ')
     },
-    getIngredientName(name: string): string {
-      return (this.t.ingredientNames as Record<string, string>)[name] ?? name
-    },
-    formatIngredients(
-      ingredients: Array<{ name: string; amount: string }>,
-    ): string {
-      return ingredients
-        .map((ingredient) => `${this.getIngredientName(ingredient.name)} (${ingredient.amount})`)
-        .join(', ')
-    },
-    formatMissingIngredients(
-      ingredients: Array<{ name: string }>,
-    ): string {
-      return ingredients
-        .map((ingredient) => this.getIngredientName(ingredient.name))
-        .join(', ')
+    formatMissingIngredients(ingredients: Array<{ name: string }>): string {
+      return ingredients.map((ingredient) => ingredient.name).join(', ')
     },
   },
 })
@@ -142,7 +78,6 @@ export default defineComponent({
 <template>
   <section class="view drinks-view">
     <h2>{{ t.title }}</h2>
-
     <p class="intro">{{ t.intro }}</p>
 
     <section class="group">
@@ -150,12 +85,12 @@ export default defineComponent({
       <p v-if="recommendations.canMakeNow.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.canMakeNow" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
-          <strong>{{ getDrinkName(entry.drink) }}</strong>
+          <strong>{{ entry.drink.name }}</strong>
           <button type="button" @click="toggleFavorite(entry.drink.id)">
-            {{ entry.drink.isFavorite ? t.unfavorite : t.favorite }}
+            {{ isFavorite(entry.drink.id) ? t.unfavorite : t.favorite }}
           </button>
         </div>
-        <p>{{ getDrinkDescription(entry.drink) }}</p>
+        <p>{{ entry.drink.description }}</p>
         <p><strong>{{ t.ingredients }}:</strong> {{ formatIngredients(entry.drink.ingredients) }}</p>
       </article>
     </section>
@@ -165,12 +100,12 @@ export default defineComponent({
       <p v-if="recommendations.missingOneIngredient.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.missingOneIngredient" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
-          <strong>{{ getDrinkName(entry.drink) }}</strong>
+          <strong>{{ entry.drink.name }}</strong>
           <button type="button" @click="toggleFavorite(entry.drink.id)">
-            {{ entry.drink.isFavorite ? t.unfavorite : t.favorite }}
+            {{ isFavorite(entry.drink.id) ? t.unfavorite : t.favorite }}
           </button>
         </div>
-        <p>{{ getDrinkDescription(entry.drink) }}</p>
+        <p>{{ entry.drink.description }}</p>
         <p><strong>{{ t.ingredients }}:</strong> {{ formatIngredients(entry.drink.ingredients) }}</p>
         <p><strong>{{ t.missingIngredients }}:</strong> {{ formatMissingIngredients(entry.missingIngredients) }}</p>
       </article>
@@ -181,12 +116,12 @@ export default defineComponent({
       <p v-if="recommendations.missingMultipleIngredients.length === 0">{{ t.noDrinks }}</p>
       <article v-for="entry in recommendations.missingMultipleIngredients" :key="entry.drink.id" class="drink-card">
         <div class="title-row">
-          <strong>{{ getDrinkName(entry.drink) }}</strong>
+          <strong>{{ entry.drink.name }}</strong>
           <button type="button" @click="toggleFavorite(entry.drink.id)">
-            {{ entry.drink.isFavorite ? t.unfavorite : t.favorite }}
+            {{ isFavorite(entry.drink.id) ? t.unfavorite : t.favorite }}
           </button>
         </div>
-        <p>{{ getDrinkDescription(entry.drink) }}</p>
+        <p>{{ entry.drink.description }}</p>
         <p><strong>{{ t.ingredients }}:</strong> {{ formatIngredients(entry.drink.ingredients) }}</p>
         <p><strong>{{ t.missingIngredients }}:</strong> {{ formatMissingIngredients(entry.missingIngredients) }}</p>
       </article>

@@ -54,11 +54,16 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows shared inventory items
   - Includes a minimal add-item form (`name`, `category`, optional `brand`)
   - Supports toggling `isFavorite` per item
-- Drinks view (local state):
-  - Uses `seedDrinks` and shared demo inventory data
+- Shared drink favorites state (local composable):
+  - Initializes favorite drink ids from localStorage when valid data exists
+  - Falls back to seed drink favorites when storage is empty or invalid
+  - Exposes `favoriteDrinkIds`, `isDrinkFavorite`, and `toggleDrinkFavorite`
+  - Reused across Drinks and Favorites views
+- Drinks view (shared favorites state):
+  - Uses `seedDrinks` and shared inventory data
   - Groups drinks by recommendation status
   - Shows name, description, ingredients, and missing ingredients
-  - Supports toggling local `isFavorite` per drink
+  - Supports toggling shared drink favorite state
 - Favorites view (read-only):
   - Uses `demoInventory` and `seedDrinks`
   - Shows favorite inventory items
@@ -190,4 +195,4 @@ Expected Vercel settings:
 - Dashboard and Drinks views use shared demo inventory from `src/data/demoInventory.ts` with a few favorite items marked.
 - Dashboard summary currently uses demo inventory data only.
 - Inventory data is currently shared in-memory state only (no persistence).
-- Drinks view data is currently local view state only (no persistence).
+- Drink favorites are persisted in localStorage via shared drink favorites composable.
