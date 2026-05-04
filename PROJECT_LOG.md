@@ -150,3 +150,17 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Reuse the same inventory source in additional views where relevant.
+
+## 2026-05-04 (First usable favorites view)
+
+### Changed
+- Updated `src/views/FavoritesView.vue` to use `demoInventory` and `seedDrinks`.
+- Added read-only sections for favorite inventory items and favorite drinks.
+- Added clear empty states, including when there are no favorite drinks yet.
+
+### Why
+- Delivers the first practical favorites view with real seeded/demo data.
+- Keeps behavior simple and deterministic without adding persistence or shared state complexity.
+
+### Next
+- Connect favorites to interactive toggles from inventory and drinks views.

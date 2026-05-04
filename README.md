@@ -52,7 +52,11 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Groups drinks by recommendation status
   - Shows name, description, ingredients, and missing ingredients
   - Supports toggling local `isFavorite` per drink
-  - Includes in-page language selection (default Swedish, English second)
+- Favorites view (read-only):
+  - Uses `demoInventory` and `seedDrinks`
+  - Shows favorite inventory items
+  - Shows favorite drinks
+  - Shows a clear empty state when no favorite drinks exist
 
 ## Planned MVP features
 
