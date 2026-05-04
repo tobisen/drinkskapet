@@ -401,3 +401,21 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add optional duplicate checks in edit mode against other inventory items.
+
+## 2026-05-04 (Grouped related drinks on inventory detail)
+
+### Changed
+- Updated `src/views/InventoryItemDetailView.vue` related drinks section to use recommendation grouping.
+- Related drinks are now grouped into:
+  - can make now with this item
+  - close matches missing one ingredient
+  - other recipes using this item
+- Kept links from each related drink to its detail page.
+- Kept clear empty state when no drinks use the selected item.
+
+### Why
+- Makes related drink recommendations more actionable from an inventory perspective.
+- Reuses existing recommendation logic for consistent classification.
+
+### Next
+- Optionally show missing ingredient names in the close-match group.

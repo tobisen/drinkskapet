@@ -67,7 +67,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Supports edit mode (name, category, subCategory, brand, quantity, volumeMl, alcoholPercentage, barcode, articleNumber) and delete with confirm
   - Validates required fields and numeric ranges
   - Shows item details and favorite toggle
-  - Shows related drinks based on ingredient matching
+  - Shows related drinks grouped by can-make-now, close matches, and other recipes using the item
   - Includes back link to Inventory and clear not-found state
 - Shared drink favorites state (local composable):
   - Initializes favorite drink ids from localStorage when valid data exists

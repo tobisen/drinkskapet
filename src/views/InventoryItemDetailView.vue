@@ -4,6 +4,7 @@ import { useInventory } from '../features/inventory/useInventory'
 import { inventoryCategories } from '../data/inventoryCategories'
 import { seedDrinks } from '../data/seedDrinks'
 import type { InventoryCategory } from '../features/inventory/types'
+import { getDrinkRecommendations } from '../features/recommendations/recommendationService'
 
 interface EditFormState {
   name: string
@@ -32,6 +33,9 @@ const text = {
     barcode: 'Streckkod',
     articleNumber: 'Artikelnummer',
     relatedDrinks: 'Relaterade drinkar',
+    relatedCanMakeNow: 'Kan göra nu med denna produkt',
+    relatedMissingOne: 'Nära match, saknar en ingrediens',
+    relatedOther: 'Andra recept med denna produkt',
     noRelatedDrinks: 'Inga relaterade drinkar hittades för denna produkt.',
     favorite: 'Favorit',
     unfavorite: 'Ta bort favorit',
@@ -59,6 +63,9 @@ const text = {
     barcode: 'Barcode',
     articleNumber: 'Article number',
     relatedDrinks: 'Related drinks',
+    relatedCanMakeNow: 'Can make now with this item',
+    relatedMissingOne: 'Close matches, missing one ingredient',
+    relatedOther: 'Other recipes using this item',
     noRelatedDrinks: 'No related drinks found for this item.',
     favorite: 'Favorite',
     unfavorite: 'Unfavorite',
@@ -134,6 +141,26 @@ export default defineComponent({
             .some((term) => itemTerms.includes(term))
         })
       })
+    },
+    relatedRecommendations() {
+      if (this.relatedDrinks.length === 0) {
+        return {
+          canMakeNow: [],
+          missingOneIngredient: [],
+          missingMultipleIngredients: [],
+        }
+      }
+
+      return getDrinkRecommendations(this.inventoryItems, this.relatedDrinks)
+    },
+    relatedCanMakeNow() {
+      return this.relatedRecommendations.canMakeNow
+    },
+    relatedMissingOne() {
+      return this.relatedRecommendations.missingOneIngredient
+    },
+    relatedOtherRecipes() {
+      return this.relatedRecommendations.missingMultipleIngredients
     },
   },
   methods: {
@@ -317,11 +344,28 @@ export default defineComponent({
 
       <div>
         <h3>{{ t.relatedDrinks }}</h3>
-        <ul v-if="relatedDrinks.length > 0">
-          <li v-for="drink in relatedDrinks" :key="drink.id">
-            <RouterLink :to="`/drinks/${drink.id}`">{{ drink.name }}</RouterLink>
-          </li>
-        </ul>
+        <template v-if="relatedDrinks.length > 0">
+          <p><strong>{{ t.relatedCanMakeNow }}</strong></p>
+          <ul v-if="relatedCanMakeNow.length > 0">
+            <li v-for="entry in relatedCanMakeNow" :key="entry.drink.id">
+              <RouterLink :to="`/drinks/${entry.drink.id}`">{{ entry.drink.name }}</RouterLink>
+            </li>
+          </ul>
+
+          <p><strong>{{ t.relatedMissingOne }}</strong></p>
+          <ul v-if="relatedMissingOne.length > 0">
+            <li v-for="entry in relatedMissingOne" :key="entry.drink.id">
+              <RouterLink :to="`/drinks/${entry.drink.id}`">{{ entry.drink.name }}</RouterLink>
+            </li>
+          </ul>
+
+          <p><strong>{{ t.relatedOther }}</strong></p>
+          <ul v-if="relatedOtherRecipes.length > 0">
+            <li v-for="entry in relatedOtherRecipes" :key="entry.drink.id">
+              <RouterLink :to="`/drinks/${entry.drink.id}`">{{ entry.drink.name }}</RouterLink>
+            </li>
+          </ul>
+        </template>
         <p v-else>{{ t.noRelatedDrinks }}</p>
       </div>
     </article>
