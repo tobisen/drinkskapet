@@ -4,6 +4,7 @@ import InventoryView from '../views/InventoryView.vue'
 import DrinksView from '../views/DrinksView.vue'
 import FavoritesView from '../views/FavoritesView.vue'
 import DiscoverView from '../views/DiscoverView.vue'
+import ShoppingSuggestionsView from '../views/ShoppingSuggestionsView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/discover',
       name: 'discover',
       component: DiscoverView,
+    },
+    {
+      path: '/shopping-suggestions',
+      name: 'shopping-suggestions',
+      component: ShoppingSuggestionsView,
     },
   ],
 })

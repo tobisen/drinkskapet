@@ -28,6 +28,7 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Drink Suggestions
   - Favorites
   - Discover
+  - Shopping Suggestions
 - Initial domain model for:
   - Inventory categories and items
   - Drink recipes and drink ingredients
@@ -62,6 +63,11 @@ Initial Vue 3 + Vite + TypeScript structure is in place with Vue Router, base mo
   - Shows easy drinks to try
   - Shows drinks close to your inventory
   - Shows ingredients or categories to explore next
+- Shopping Suggestions view (read-only):
+  - Uses `seedDrinks` and `demoInventory`
+  - Uses recommendation next-purchase helper
+  - Shows suggested purchases sorted by usefulness
+  - Shows ingredient, unlocked/improved drink count, and related drink names
 
 ## Planned MVP features
 
@@ -139,6 +145,7 @@ src/
     DrinksView.vue
     FavoritesView.vue
     DiscoverView.vue
+    ShoppingSuggestionsView.vue
   App.vue
   main.ts
   style.css
@@ -151,6 +158,7 @@ src/
 - `/drinks` -> Drink Suggestions
 - `/favorites` -> Favorites
 - `/discover` -> Discover
+- `/shopping-suggestions` -> Shopping Suggestions
 
 ## Environment variables
 

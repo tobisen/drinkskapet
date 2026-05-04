@@ -181,3 +181,20 @@ This file tracks meaningful project decisions and implementation steps.
 
 ### Next
 - Add localization for drink descriptions and ingredient names in Discover.
+
+## 2026-05-04 (First usable shopping suggestions view)
+
+### Changed
+- Added `src/views/ShoppingSuggestionsView.vue`.
+- Added a new route in `src/router/index.ts` for `/shopping-suggestions`.
+- Added navigation link in `src/App.vue`.
+- Implemented read-only shopping suggestions using `seedDrinks`, `demoInventory`, and recommendation next-purchase helper.
+- Added suggestion cards with ingredient name, unlock/improve count, and related drink names.
+- Added clear empty state when no suggestions are available.
+
+### Why
+- Delivers the first dedicated shopping suggestion page aligned with core product value.
+- Reuses deterministic recommendation logic without introducing persistence or external dependencies.
+
+### Next
+- Connect shopping suggestions to real user inventory when persistence is introduced.
